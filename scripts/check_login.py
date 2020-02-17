@@ -34,22 +34,31 @@ try:
             cookie_id = functions.random_sequence(10)
             user_id = str(user_details[2])
             update_time = str(datetime.datetime.now())
+            time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10))
 
-            # Insert data into the sessions table
-            insert_query = "INSERT INTO `sessions`(`sid`, `uid`, `create_time`, `update_time`, `ip_address`, `user_agent`) VALUES ('" + cookie_id + "','" + user_id + "','" + update_time + "','" + update_time + "','" + user_ip + "','" + user_agent + "')"
+            select_query = "SELECT `sid` FROM `sessions` WHERE `uid` ='" +user_id+ "' AND `logged_out` = '0' AND `update_time` >='" +str(time_before)+"'"
+           
+            mycursor.execute(select_query)
+            user_twice = mycursor.fetchall()
+            if len(user_twice) <  2:            
+                # Insert data into the sessions table
+                insert_query = "INSERT INTO `sessions`(`sid`, `uid`, `create_time`, `update_time`, `ip_address`, `user_agent`) VALUES ('" + cookie_id + "','" + user_id + "','" + update_time + "','" + update_time + "','" + user_ip + "','" + user_agent + "')"
 
-            mycursor.execute(insert_query)
-            mydb.commit()
-            mydb.close()
+                mycursor.execute(insert_query)
+                mydb.commit()
+                mydb.close()
 
-            print("Set-Cookie: LoggedIn=" + cookie_id + "; Path=/")
+                print("Set-Cookie: LoggedIn=" + cookie_id + "; Path=/")
 
-            # Now, go to home page...
-            print("location: ../home_page.html")
-            print("")
+                # Now, go to home page...
+                print("location: ../home_page.html")
+                print("")
+            else:
+                print("location: ../login.html?err=2")
+                print("")
         else:
-            print("location: ../login.html?err=1")
-            print("")
+                print("location: ../login.html?err=1")
+                print("")
     except:
         print("location: ../login.html?err=1")
         print("")

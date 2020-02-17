@@ -47,6 +47,9 @@
                 if (url.searchParams.get("err") == "1"){
                     document.getElementById('err').innerHTML = "אחד הנתונים שגוי!";
                 }
+                if(url.searchParams.get("err") == "2"){
+                    document.getElementById('err').innerHTML = "אינך יכול להיכנס יותר מ2 מקומות שונים לאתר";
+                }
                 if (url.searchParams.get("msg") == "0"){
                     document.getElementById('err').innerHTML = "הסיסמא שונתה כעת ניתן להיכנס!";
                     document.getElementById('email').value = url.searchParams.get("email");
