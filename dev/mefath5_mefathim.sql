@@ -32,10 +32,6 @@ CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL,
   `user_id` int(30) NOT NULL,
   `post_text` text NOT NULL,
-  `back_color` varchar(30) NOT NULL,
-  `text_color` varchar(30) NOT NULL,
-  `font_type` varchar(30) NOT NULL,
-  `font_size` varchar(30) NOT NULL,
   `write_time` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
