@@ -22,18 +22,18 @@ try:
 
     mydb = functions.connect()
 
-    session_sql = "SELECT `update_time`, `logged_out` FROM sessions WHERE sid = '" + sid + "'"
+    session_sql = "SELECT `update_time`, `logged_out`,`uid` FROM sessions WHERE sid = '" + sid + "'"
 
     mycursor = mydb.cursor()
     mycursor.execute(session_sql)
     details = mycursor.fetchall()
 
     time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10))
-    time, logged = details[0]
+    time, logged,uid = details[0]
 
     checker = True
     users = []
-
+ 
     if time > time_before and logged == 0:
 
         # update the time connect you should send as parameters the connection to the server and the sid
@@ -51,7 +51,7 @@ try:
             users.append(user)
     else:
         checker = False
-    json_res = {"ok": checker, "data": users}
+    json_res = {"ok": checker,"id":uid, "data": users}
     print(json.dumps(json_res, indent=4, default=str, ensure_ascii=False).encode('utf-8').decode())
 
 except Exception as e:

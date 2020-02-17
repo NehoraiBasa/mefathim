@@ -53,3 +53,11 @@ def get_hash(password, salt):
     pwd_salt = str(password) + str(salt)
     m = hashlib.sha1(pwd_salt.encode())
     return m.hexdigest()
+
+def get_user_id():
+    sid = get_cookie_value('LoggedIn')
+    uid_sql = "SELECT `uid` FROM sessions WHERE sid = '" + sid + "'"
+    mydb = connect()
+    mycursor = mydb.cursor(uid_sql)
+    mycursor.execute(uid_sql)
+    return mycursor.fetchall()[0][0]

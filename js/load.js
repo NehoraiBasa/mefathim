@@ -29,7 +29,7 @@ function check_connect(){
 user_id = "";
 
 function buildnavbar(){
-
+    user_id = "";
     objects=[];
 
     $.get("scripts/user_data.py", function(result){
@@ -85,7 +85,6 @@ function buildnavbar(){
 function get_connected_users(){
     
     $.get("scripts/users_get.py", function(result){
-       console.log(user_id);
         var users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";
@@ -97,9 +96,7 @@ function get_connected_users(){
                 if (img_num == null){
                     img_num = "22";
                 }
-                if (sel.id == user_id) {
-
-                    
+                if (sel.id == users.id) {
                     faces += "<li class=' list-group-item users'><div class='float-right' style='margin-top:25px;'>"
                     + "את \/ אתה " +"</div><div class='float-left'><img src='img/avatars/"
                     +img_num+".png' style=' border-radius:50%;' class='users_face' id='face'></div></li>";
@@ -117,6 +114,7 @@ function get_connected_users(){
 function print_post() {
 			
         $.get("scripts/get_posts.py", function(data){
+            console.log(data);
         var all_posts = JSON.parse(data);
         
         var i = 0;
@@ -125,18 +123,13 @@ function print_post() {
         
         for (x in all_posts)
         {
-            
             sel = all_posts[x];
-            
             posts += "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
-             sel.user +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
-            "</p></div>";
-            
-            
-            
+            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+            "</p></div>";            
         }
-    //    console.log(data);
+
         $(".posts").html(posts);
-        $("#text").val('');
+       
     });
 }

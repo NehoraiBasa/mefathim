@@ -13,14 +13,14 @@ try:
 
 
     def print_posts():
-        select_query = "SELECT post_id, user_name,post_text,write_time FROM posts ORDER BY post_id DESC LIMIT 5 "
+        select_query = "SELECT nickname, post_text , write_time FROM users, posts WHERE users.id = posts.user_id ORDER BY post_id DESC LIMIT 20 "
+
         cursor.execute(select_query)
         post_data = cursor.fetchall()
 
         json_data=[]
         for x in post_data:
-            user = x[1]
-            json_data.append({"post" : x[0], "user" : user,"text" : x[2],"writing_time": x[3],})
+            json_data.append({"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],})
 
         data = json.dumps(json_data, indent=4, default=str, ensure_ascii=False).encode('UTF-8')
         print(data.decode())
