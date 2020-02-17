@@ -89,7 +89,9 @@ function get_connected_users(){
         if (users.ok == false) {
           window.location.href = "login.html";
         }else {
-            var faces = "<div class=''><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כרגע באתר</li>";
+
+            var faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כרגע באתר</li>";
+            id_king = users.king;
             for (x in users.data) {
                 sel = users.data[x];
                 img_num = sel.picture_number;
