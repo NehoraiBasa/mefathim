@@ -3,9 +3,10 @@
 import mysql.connector
 import os
 import string
-import datetime
 import hashlib
 import random
+import datetime
+
 
 def get_cookie_value(key):
     handler = {}
@@ -23,7 +24,7 @@ def get_cookie_value(key):
 
 
 def connect():
-    db = mysql.connector.connect(host="localhost",
+    db = mysql.connector.connect(host="127.0.0.1",
                                  user="mefath5_dev",
                                  password="dev12345",
                                  database="mefath5_mefathim")
@@ -52,3 +53,11 @@ def get_hash(password, salt):
     pwd_salt = str(password) + str(salt)
     m = hashlib.sha1(pwd_salt.encode())
     return m.hexdigest()
+
+def get_user_id():
+    sid = get_cookie_value('LoggedIn')
+    uid_sql = "SELECT `uid` FROM sessions WHERE sid = '" + sid + "'"
+    mydb = connect()
+    mycursor = mydb.cursor(uid_sql)
+    mycursor.execute(uid_sql)
+    return mycursor.fetchall()[0][0]
