@@ -15,6 +15,8 @@ function check_connect(){
         $.post( "scripts/check_connect.py", JSON.stringify({ "cookie": connect }))
         .done(function( data ) {
             myObj = JSON.parse(data);
+            
+        
             if (myObj.ok == false){
                 window.location.href = "login.html";
             }
@@ -22,16 +24,18 @@ function check_connect(){
     }
 }
 
-//check_connect();
+
 
 user_id = "";
 
 function buildnavbar(){
-
+    user_id = "";
     objects=[];
 
     $.get("scripts/user_data.py", function(result){
         user_data = JSON.parse(result);
+        user_id = user_data.data.id;
+        console.log(user_data);
         if (user_data.ok == false) {
             window.location.href = "login.html";
         }
@@ -68,7 +72,7 @@ function buildnavbar(){
 
         profile+="</div></li>"
 
-        face="<div id='profile'><img src='img/avatars/"+picture_number+".png' id='face' style='border-radius:50%;'><div id='user'class='title'></div>";
+        face="<div id='profile'><img src='img/avatars/"+picture_number+".png'id='face'><div id='user'class='title'></div>";
 
         navbar+=profile+face;
     
@@ -79,37 +83,55 @@ function buildnavbar(){
 
 
 function get_connected_users(){
-    if (user_id) {
-        console.log(user_id);
-    }
+    
     $.get("scripts/users_get.py", function(result){
-
-        var class_king = "";
         var users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";
         }else {
+
             var faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כרגע באתר</li>";
             id_king = users.king;
             for (x in users.data) {
-                class_king = "";
                 sel = users.data[x];
-                console.log(sel)  
                 img_num = sel.picture_number;
-                if (sel.id == id_king){
-                    class_king = "king"
-                }
                 if (img_num == null){
                     img_num = "22";
                 }
-                if (sel.id != user_id) {
-                    faces += "<li class='" + class_king + " list-group-item users'><div class='float-right' style='margin-top:25px;'>"+ sel.nickname + "</div><div class='float-left'><img src='img/avatars/"+img_num+".png' style=' border-radius:50%;' class='users_face' id='face'></div></li>";
+                if (sel.id == users.id) {
+                    faces += "<li class=' list-group-item users'><div class='float-right' style='margin-top:25px;'>"
+                    + "את \/ אתה " +"</div><div class='float-left'><img src='img/avatars/"
+                    +img_num+".png' style=' border-radius:50%;' class='users_face' id='face'></div></li>";
+                } else {
+                    faces += "<li class=' list-group-item users'><div class='float-right' style='margin-top:25px;'>"
+                    + sel.nickname +"</div><div class='float-left'><img src='img/avatars/"
+                    +img_num+".png' style=' border-radius:50%;' class='users_face' id='face'></div></li>";
                 }
-                
-
             }
             faces += "</ul></div>"
             $("#now_logged").html(faces);
         }
+    });
+}
+function print_post() {
+			
+        $.get("scripts/get_posts.py", function(data){
+            console.log(data);
+        var all_posts = JSON.parse(data);
+        
+        var i = 0;
+        var btn_more = "";
+        var posts = "";
+        
+        for (x in all_posts)
+        {
+            sel = all_posts[x];
+            posts += "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
+            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+            "</p></div>";            
+        }
+
+        $(".posts").html(posts);
+       
     });
 }

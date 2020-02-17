@@ -1,11 +1,11 @@
 ﻿-- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jan 26, 2020 at 08:37 AM
--- Server version: 10.2.27-MariaDB-log
--- PHP Version: 7.2.7
+-- Host: 127.0.0.1
+-- Generation Time: פברואר 17, 2020 בזמן 10:26 AM
+-- גרסת שרת: 10.4.10-MariaDB
+-- PHP Version: 7.1.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sessions`
+-- מבנה טבלה עבור טבלה `posts`
+--
+
+CREATE TABLE `posts` (
+  `post_id` int(11) NOT NULL,
+  `user_id` int(30) NOT NULL,
+  `post_text` text NOT NULL,
+  `write_time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- מבנה טבלה עבור טבלה `sessions`
 --
 
 CREATE TABLE `sessions` (
@@ -42,7 +55,7 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- מבנה טבלה עבור טבלה `users`
 --
 
 CREATE TABLE `users` (
@@ -65,7 +78,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `users`
+-- הוצאת מידע עבור טבלה `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `status`, `nickname`, `password_hash`, `salt`, `creation_date`, `gender`, `date_of_birth`, `city`, `country`, `phone_number`, `picture_number`) VALUES
@@ -80,7 +93,7 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 (14, 'yishayish@gmail.com', 'ישי', 'משה', 'שטרסלר', 0, 'ישי', '5e6e681d465c8b2d4bdfec8e095276e38e4a2b54', '8808', '2019-12-18', 1, '1987-01-16', 'בית שמש', 'ישר', '0548416385', NULL),
 (17, 'ben8652800@gmail.com', 'ben', 'zion', 'katz', 0, 'בנצי', 'cbce00b1b1ace7e21bf77ed9457bb950b3628cf7', '8099', '2019-12-23', 1, '1989-05-31', 'ashdod', 'ישר', '0504166992', NULL),
 (19, 'ilan@zisser.com', 'אילן', '', 'זיסר', 0, 'אילן אלכס', 'd7e93030c6452ca7951ed75eca1151a77fdb0f89', '5699', '2019-12-25', 1, '1964-07-25', 'תל אביב', 'isr', '0544985726', 11),
-(20, 'bentsikalat@gmail.com', 'בנצי', '', 'חלאט', 0, 'קוצו של יוד', '5cd8b381d5c1a2d999f5fc89b27f819a3008508d', '9920', '2019-12-25', 1, '1800-01-22', 'פתח תקווה', 'isr', '0537138979', 6),
+(20, 'bentsikalat@gmail.com', 'בנצי', '', 'חלאט', 0, 'קוצו של יוד', '5cd8b381d5c1a2d999f5fc89b27f819a3008508d', '9920', '2019-12-25', 1, '1800-01-22', 'פתח תקווה', 'isr', '0537138979', 7),
 (21, 'ytzyk550@gmail.com', '', '', '', 0, 'المطورون', 'aa642e6df802a6586aeb05a7371a8c60c66ec051', 'KRcN2', '2019-12-25', 1, '0000-00-00', '', 'isr', '', 12),
 (24, 'pituchimh@gmail.com', 'akiva', '', 'ashtamker', 0, 'akiva', 'd0cc804a7170aafedda93dd68c1fcadb90be98cf', '5959', '2019-12-25', 1, '1990-09-11', 'baitar', 'isr', '0548460963', NULL),
 (25, 'y131323@gmail.com', 'None', NULL, 'None', 0, 'יוסי', 'bef38bb31531404fcb18b67f64be6dd5eb724fef', '2363', '2019-12-25', 1, '2019-12-11', 'None', 'isr', 'None', NULL),
@@ -114,13 +127,19 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 --
 
 --
--- Indexes for table `sessions`
+-- אינדקסים לטבלה `posts`
+--
+ALTER TABLE `posts`
+  ADD UNIQUE KEY `post_id` (`post_id`);
+
+--
+-- אינדקסים לטבלה `sessions`
 --
 ALTER TABLE `sessions`
   ADD KEY `update_time` (`update_time`);
 
 --
--- Indexes for table `users`
+-- אינדקסים לטבלה `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -131,49 +150,17 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 COMMIT;
-
-
---
--- מבנה טבלה עבור טבלה `posts`
---
-
-CREATE TABLE `posts` (
-  `post_id` int(11) NOT NULL,
-  `user_name` varchar(30) NOT NULL,
-  `post_text` text NOT NULL,
-  `back_color` varchar(30) NOT NULL,
-  `text_color` varchar(30) NOT NULL,
-  `font_type` varchar(30) NOT NULL,
-  `font_size` varchar(30) NOT NULL,
-  `write_time` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Indexes for dumped tables
---
-
---
--- אינדקסים לטבלה `posts`
---
-ALTER TABLE `posts`
-  ADD KEY `id` (`post_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `posts`
---
-ALTER TABLE `posts`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
