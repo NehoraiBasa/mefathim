@@ -115,23 +115,57 @@ function get_connected_users(){
 }
 function print_post() {
 			
-        $.get("scripts/get_posts.py", function(data){
-            console.log(data);
-        var all_posts = JSON.parse(data);
-        
-        var i = 0;
-        var btn_more = "";
-        var posts = "";
-        
-        for (x in all_posts)
-        {
-            sel = all_posts[x];
-            posts += "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
-            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
-            "</p></div>";            
+    $.get("scripts/get_posts.py", function(data){
+        console.log(data);
+    var all_posts = JSON.parse(data);
+    if (all_posts.ok == false) {
+        window.location.href = "login.html";
+    }
+    
+    $(".posts").empty();  
+    for (x in all_posts.data)
+    {
+        sel = all_posts.data[x];
+        if (sel.owner==false){
+            var post = $(  "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
+                                sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+                            "</p></div>");
+                $(".posts").append(post);
         }
+         else{
+            id = sel.post_id;
+            var post = $(  "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
+                            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+                             "</p><button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button> </div>");
+            $(".posts").append(post);  
+            $('#delete_post'+id+'').click(function(){
+             
+                delete_post(id);
+                      
+            });
+            
+           
 
-        $(".posts").html(posts);
-       
-    });
+
+
+
+        }    
+       // posts+="</div>";  
+          
+    }
+
+ //   $(".posts").html(posts);
+   
+});
+}
+
+
+function delete_post(id) {
+    $.post("scripts/delete_post.py",
+        {
+        post_id: id,
+        
+        }, function(){
+            print_post();
+        });
 }

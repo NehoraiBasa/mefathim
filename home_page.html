@@ -27,14 +27,15 @@
             <div  id="now_logged" class="col-3 text-top"></div>
                 
             <div class="col-5 align-top post_area">
-                <button id="write" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
+                <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
                 <div id="write_post" style="display: none;">
-                        <textarea class="new_post" id="text" placeholder="פרסם פוסט" ></textarea><br>
+                        <textarea class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
                         </select>
-                        <button id="send">שלח</button>
+                        <button class="button" id="send">שלח</button>
                     </div>
                     <hr/>
                 <div class="posts  "></div>
+              
             </div>
             </div>
         </div>
@@ -50,9 +51,9 @@
 
             $(document).ready(function(){
                 print_post();
+                setInterval(function(){ print_post() }, 10000);
                 $("#send").click(function()
 				{
-                     
                     $.post("scripts/add_post.py",
                     {
                     text: $("#text").val(),
@@ -60,7 +61,7 @@
                     }, function()
 					{
                         print_post();
-                     //   setInterval(function(){ print_post() }, 10000);
+                        
 						$("#write_post").hide();
                        
                     });
@@ -69,6 +70,10 @@
                 });
    
             });
+         
+          
+
+
         </script>
 		
     </body>

@@ -61,3 +61,24 @@ def get_user_id():
     mycursor = mydb.cursor(uid_sql)
     mycursor.execute(uid_sql)
     return mycursor.fetchall()[0][0]
+
+
+def check_logged():
+    sid = get_cookie_value("LoggedIn")
+    if not sid:
+        return False
+
+    db = connect()
+    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10))
+    sql = "SELECT `update_time`, `logged_out` FROM sessions WHERE sid = '" + sid + "'"
+    session_cursor = db.cursor()
+    session_cursor.execute(sql)
+    session = session_cursor.fetchall()
+
+    time, logged = session[0]
+    db.close() 
+    if time > time_before and logged == 0:
+        return True
+    else:
+        return False
+   
