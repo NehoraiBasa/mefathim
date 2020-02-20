@@ -1,9 +1,9 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: פברואר 17, 2020 בזמן 10:26 AM
+-- Generation Time: פברואר 20, 2020 בזמן 09:43 AM
 -- גרסת שרת: 10.4.10-MariaDB
 -- PHP Version: 7.1.33
 
@@ -32,7 +32,8 @@ CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL,
   `user_id` int(30) NOT NULL,
   `post_text` text NOT NULL,
-  `write_time` timestamp NOT NULL DEFAULT current_timestamp()
+  `write_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` int(5) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -93,7 +94,7 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 (14, 'yishayish@gmail.com', 'ישי', 'משה', 'שטרסלר', 0, 'ישי', '5e6e681d465c8b2d4bdfec8e095276e38e4a2b54', '8808', '2019-12-18', 1, '1987-01-16', 'בית שמש', 'ישר', '0548416385', NULL),
 (17, 'ben8652800@gmail.com', 'ben', 'zion', 'katz', 0, 'בנצי', 'cbce00b1b1ace7e21bf77ed9457bb950b3628cf7', '8099', '2019-12-23', 1, '1989-05-31', 'ashdod', 'ישר', '0504166992', NULL),
 (19, 'ilan@zisser.com', 'אילן', '', 'זיסר', 0, 'אילן אלכס', 'd7e93030c6452ca7951ed75eca1151a77fdb0f89', '5699', '2019-12-25', 1, '1964-07-25', 'תל אביב', 'isr', '0544985726', 11),
-(20, 'bentsikalat@gmail.com', 'בנצי', '', 'חלאט', 0, 'קוצו של יוד', '5cd8b381d5c1a2d999f5fc89b27f819a3008508d', '9920', '2019-12-25', 1, '1800-01-22', 'פתח תקווה', 'isr', '0537138979', 7),
+(20, 'bentsikalat@gmail.com', 'בנצי', '', 'חלאט', 0, 'קוצו של יוד', '8da8e7583b475534e362cbd3b77d91a6ebc4c686', '9813', '2019-12-25', 1, '1800-01-22', 'פתח תקווה', 'isr', '0537138979', 7),
 (21, 'ytzyk550@gmail.com', '', '', '', 0, 'المطورون', 'aa642e6df802a6586aeb05a7371a8c60c66ec051', 'KRcN2', '2019-12-25', 1, '0000-00-00', '', 'isr', '', 12),
 (24, 'pituchimh@gmail.com', 'akiva', '', 'ashtamker', 0, 'akiva', 'd0cc804a7170aafedda93dd68c1fcadb90be98cf', '5959', '2019-12-25', 1, '1990-09-11', 'baitar', 'isr', '0548460963', NULL),
 (25, 'y131323@gmail.com', 'None', NULL, 'None', 0, 'יוסי', 'bef38bb31531404fcb18b67f64be6dd5eb724fef', '2363', '2019-12-25', 1, '2019-12-11', 'None', 'isr', 'None', NULL),
@@ -120,7 +121,8 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 (60, 'urko@gmail.com', 'חנהלה', NULL, 'None', 0, 'חנהלה', '401127fc67636d207de492d086c74c85aad2ac0a', '4326', '2020-01-13', 1, '1567-03-01', 'bet shemesh', 'Isr', '0548187150', NULL),
 (61, '7242205@gmail.com', 'אברהם', NULL, 'לוינגר', 0, 'שלום 1', 'b2239447bf69707dd60a064bf7c94c3f7af5c031', '4037', '2020-01-13', 1, '0000-00-00', 'None', 'isr', 'None', NULL),
 (62, 'oz91342@gmail.com', 'עוז', NULL, 'כהן', 0, 'עוז', 'ffba02b2a74dee388a3bbb34626e9e8f0028b55b', '8606', '2020-01-21', 1, '1992-10-24', 'ירושלים', 'isr', '0525716313', NULL),
-(63, 'bentsikhalat@gmail.com', '1', NULL, 'None', 0, '1', '8655e6639a4dcd20cd76d5b4035a068add9f36ae', '3150', '2020-01-26', 1, '0111-11-11', 'תל אביב', 'isr', '1111111111', NULL);
+(63, 'bentsikhalat@gmail.com', '1', NULL, 'None', 0, '1', '8655e6639a4dcd20cd76d5b4035a068add9f36ae', '3150', '2020-01-26', 1, '0111-11-11', 'תל אביב', 'isr', '1111111111', NULL),
+(64, 'a@a.a', 'a', '', 'None', 0, 'a', '56cf5b88723ee41323c46e98ff64800a6f2b1b7c', '5450', '2020-02-19', 1, '0000-00-00', 'None', 'isr', 'None', NULL);
 
 --
 -- Indexes for dumped tables
@@ -159,7 +161,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
