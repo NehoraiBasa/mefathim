@@ -35,7 +35,7 @@ function buildnavbar(){
     $.get("scripts/user_data.py", function(result){
         user_data = JSON.parse(result);
         user_id = user_data.data.id;
-        console.log(user_data);
+        
         if (user_data.ok == false) {
             window.location.href = "login.html";
         }
@@ -116,7 +116,7 @@ function get_connected_users(){
 function print_post() {
 			
     $.get("scripts/get_posts.py", function(data){
-        console.log(data);
+       // console.log(data);
     var all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
         window.location.href = "login.html";
@@ -128,14 +128,14 @@ function print_post() {
         sel = all_posts.data[x];
         if (sel.owner==false){
             var post = $(  "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
-                                sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+                                sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post container'> "+ sel.text +
                             "</p></div>");
                 $(".posts").append(post);
         }
          else{
             id = sel.post_id;
             var post = $(  "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
-                            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
+                            sel.nickname +"  |   "+ sel.writing_time +"</p><p class=' container post'> "+ sel.text +
                              "</p><button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button> </div>");
             $(".posts").append(post);  
             $('#delete_post'+id+'').click(function(){

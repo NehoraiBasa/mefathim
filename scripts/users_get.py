@@ -13,45 +13,29 @@ sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 print("Content-Type: text/plain; charset=UTF-8\n\n")
 
 try:
-
+    uid=functions.get_user_id()
     sid = functions.get_cookie_value('LoggedIn')
-    if not sid:
+
+    if not functions.check_logged():
         json_res = {"ok": False, "data": []}
         print(json.dumps(json_res, indent=4, default=str, ensure_ascii=False).encode('utf-8').decode())
         sys.exit()
 
+    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
+
+    sql = "SELECT id, nickname, picture_number FROM users, sessions WHERE users.id = sessions.uid AND logged_out = 0 AND update_time >= '" + time_before + "'"
     mydb = functions.connect()
-
-    session_sql = "SELECT `update_time`, `logged_out`,`uid` FROM sessions WHERE sid = '" + sid + "'"
-
     mycursor = mydb.cursor()
-    mycursor.execute(session_sql)
-    details = mycursor.fetchall()
-
-    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10))
-    time, logged,uid = details[0]
-
-    checker = True
+    mycursor.execute(sql)
+    all_details = mycursor.fetchall()
+    
     users = []
- 
-    if time > time_before and logged == 0:
-
-        # update the time connect you should send as parameters the connection to the server and the sid
-        functions.update_connection(mydb, sid)
-
-        time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
-
-        sql = "SELECT id, nickname, picture_number FROM users, sessions WHERE users.id = sessions.uid AND logged_out = 0 AND update_time >= '" + time_before + "'"
-        mycursor.execute(sql)
-        all_details = mycursor.fetchall()
-
-        list_of_columens = [i[0] for i in mycursor.description]
-        for row in all_details:
-            user = {key: val for key, val in zip(list_of_columens, row)}
-            users.append(user)
-    else:
-        checker = False
-    json_res = {"ok": checker,"id":uid, "data": users}
+    list_of_columens = [i[0] for i in mycursor.description]
+    for row in all_details:
+        user = {key: val for key, val in zip(list_of_columens, row)}
+        users.append(user)
+   
+    json_res = {"ok": True,"id":uid, "data": users}
     print(json.dumps(json_res, indent=4, default=str, ensure_ascii=False).encode('utf-8').decode())
 
 except Exception as e:

@@ -76,8 +76,9 @@ def check_logged():
     session = session_cursor.fetchall()
 
     time, logged = session[0]
-    db.close() 
+    
     if time > time_before and logged == 0:
+        update_connection(db, sid)
         return True
     else:
         return False
