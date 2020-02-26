@@ -61,3 +61,35 @@ def get_user_id():
     mycursor = mydb.cursor(uid_sql)
     mycursor.execute(uid_sql)
     return mycursor.fetchall()[0][0]
+
+
+def check_logged():
+    sid = get_cookie_value("LoggedIn")
+    if not sid:
+        return False
+
+    db = connect()
+    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10))
+    sql = "SELECT `update_time`, `logged_out` FROM sessions WHERE sid = '" + sid + "'"
+    session_cursor = db.cursor()
+    session_cursor.execute(sql)
+    session = session_cursor.fetchall()
+
+    time, logged = session[0]
+    
+    if time > time_before and logged == 0:
+        update_connection(db, sid)
+        return True
+    else:
+        return False
+def set_change():
+    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
+    update_query = "UPDATE sessions SET is_changes  = '1'  WHERE  logged_out = 0 AND update_time >= '" + time_before + "'"
+    mydb = connect()
+    cursor = mydb.cursor()
+    cursor.execute(update_query)
+    mydb.commit()
+        
+
+
+   

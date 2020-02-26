@@ -26,16 +26,16 @@ function check_connect(){
 
 
 
-user_id = "";
+
 
 function buildnavbar(){
-    user_id = "";
+    let user_id = "";
     objects=[];
 
     $.get("scripts/user_data.py", function(result){
         user_data = JSON.parse(result);
         user_id = user_data.data.id;
-        console.log(user_data);
+        
         if (user_data.ok == false) {
             window.location.href = "login.html";
         }
@@ -115,23 +115,119 @@ function get_connected_users(){
 }
 function print_post() {
 			
-        $.get("scripts/get_posts.py", function(data){
-            console.log(data);
-        var all_posts = JSON.parse(data);
-        
-        var i = 0;
-        var btn_more = "";
-        var posts = "";
-        
-        for (x in all_posts)
-        {
-            sel = all_posts[x];
-            posts += "<div class=' show_posts' style='background-color: "  +";'><p class='details'>    מאת: "+
-            sel.nickname +"  |   "+ sel.writing_time +"</p><p class='post'> "+ sel.text +
-            "</p></div>";            
+    $.get("scripts/get_posts.py", function(data){
+        console.log(data);
+    let all_posts = JSON.parse(data);
+    if (all_posts.ok == false) {
+        window.location.href = "login.html";
+    }
+    
+    $(".posts").empty();  
+    for (x in all_posts.data)
+    {
+        let sel = all_posts.data[x];
+        if (sel.owner==false){
+            let post = $(  "<div class=' show_post' style='background-color: ;'>"+
+                                "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
+                                "<p class='post container'> "+ sel.text +"</p>"+
+                            "</div>");
+                $(".posts").append(post);
         }
+         else{
+            let id = sel.post_id;
+            let post =$("<div class=' show_post' id='container_post"+id+"'>"+
+                            "<div  id='show_post"+id+"' style='background-color: ;'>"+
+                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ sel.text +"</p>"+
+                                //"<div class='row'>"+
+                                "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
+                                "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
+                              //  "</div>"+
+                            "</div>"+
+                        "<div>");
+            $(".posts").append(post);
+              
+            $('#delete_post'+id+'').click(function(){
+                
+                delete_post(id);
+                      
+            });
+            $('#edit_post'+id+'').click(function(){
+                
+                edit_post(id,sel);
+                      
+            });
+            
+        }    
+    }
 
-        $(".posts").html(posts);
+});
+}
+
+function delete_post(id) {
+
+    $.post("scripts/delete_post.py",
+        {
+        post_id: id,
+        
+        }, function(){
+            print_post();
+        });
        
+}
+
+function update_post(id,post_text) {
+    
+    $.post("scripts/update_post.py",
+        {
+        post_id: id,
+        text: post_text,
+        }, function(){
+            print_post();
+            interval = setInterval( refresh , 10000);
+        });
+}
+
+function edit_post(id,sel) {
+    clearInterval(interval);
+    
+    let val = sel.text;
+    let write_post=$('<div class="container" id="container_edit_post" ">'+
+                        '<textarea class="new_post " id="new_text" placeholder="פרסם פוסט" >'+val+'</textarea><br>'+   
+                        "<div  class='row' >"+                 
+                            '<button  class="col-5 align-top"  id="send">שלח</button>'+
+                            '<button  class="col-6 align-top"  id="cancel">בטל</button>'+
+                        "</div>"+
+                    '</div>');
+
+    $('#container_post'+id+'').find('#post').hide();
+    $('#container_post'+id+'').append ($(write_post));
+    $('#container_post'+id+'').find('#cancel').click(function() {
+            $('#container_post'+id+'').find('#post').show();
+            $('#container_post'+id+'').find('#container_edit_post').remove();
+            interval = setInterval( refresh , 10000);
     });
+    $('#container_post'+id+'').find('#send').click(function() {
+        val=  $('#container_post'+id+'').find('#new_text').val(),
+        update_post(id,val);                
+    });
+
+}
+
+function refresh()
+{
+    
+    $.post("scripts/check_changes.py", function(data){
+        let data_changes = JSON.parse(data);
+            if (data_changes.ok == false) {
+                window.location.href = "login.html";
+            }
+            else if (data_changes.is_changes==false) {return;}
+            else {
+                print_post();
+                get_connected_users() ;
+            }
+
+
+        });
+
 }
