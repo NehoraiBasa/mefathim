@@ -14,9 +14,10 @@ try:
 
     form = cgi.FieldStorage()
     post_id = form.getvalue('post_id')
+    post_text = form.getvalue('text')
     uid = str(functions.get_user_id())
     try:
-        update_query = "UPDATE posts SET status = '0' WHERE  post_id = '" + post_id + "'AND user_id= '" + uid + "'" 
+        update_query = "UPDATE posts SET post_text = '"+post_text+"' WHERE  post_id = '" + post_id + "'AND user_id= '" + uid + "'" 
         mydb = mefath5_connect.get_connect()
         cursor = mydb.cursor()
         cursor.execute(update_query)

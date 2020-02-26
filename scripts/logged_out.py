@@ -20,7 +20,7 @@ try:
 
     db.commit()
     db.close()
-
+    functions.set_change()
     print("location: ../login.html\n\n")
 
 except Exception as e:

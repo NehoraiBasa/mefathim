@@ -29,8 +29,8 @@
             <div class="col-5 align-top post_area">
                 <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
                 <div id="write_post" style="display: none;">
-                        <textarea class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
-                        </select>
+                        <textarea val = "gg"class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
+                      <!--  </select>  !-->
                         <button class="button" id="send">שלח</button>
                     </div>
                     <hr/>
@@ -43,15 +43,16 @@
 
 
         <script>
+            let interval;
             $(document).ready(function(){
                 buildnavbar();
                 get_connected_users();
-                setInterval(function(){ get_connected_users() }, 10000);
+                interval = setInterval( refresh , 10000);
+               //myVar = setInterval(alertFunc, 2000, "First parameter", "Second parameter");
             });
 
             $(document).ready(function(){
                 print_post();
-                setInterval(function(){ print_post() }, 10000);
                 $("#send").click(function()
 				{
                     $.post("scripts/add_post.py",

@@ -20,34 +20,28 @@ try:
     sid = functions.get_cookie_value('LoggedIn')
     
     if not functions.check_logged():
-       
         err()
     # get the users value 
     form = cgi.FieldStorage()
     old_password = form.getvalue('old_password')
     password1 = form.getvalue('password1')
     password2 = form.getvalue('password2')
-    print (old_password,password1,password2)
-
-
-
-   
+    
     if old_password is None or password1 is None or password1 != password2:
-        print("2")
         err()
        
-    
     # check if the temporary password is true
+    
     uid = functions.get_user_id()
-    sql = "SELECT salt, password_hash FROM users WHERE id = '" +str(uid) + "'"
-    mydb = functions.connect()
-    mycursor = mydb.cursor()
-    mycursor.execute(sql)
-
     try:
+        sql = "SELECT salt, password_hash FROM users WHERE id = '" +str(uid) + "'"
+        mydb = functions.connect()
+        mycursor = mydb.cursor()
+        mycursor.execute(sql)
         user_details = mycursor.fetchone()
     except:
         err()
+
     old_salt = user_details[0]
     old_password_hash = functions.get_hash(old_password, old_salt)
 
@@ -57,15 +51,11 @@ try:
         password_hash = functions.get_hash(password1, salt)
 
         sql = "UPDATE users SET salt = '" + salt + "', password_hash='" + password_hash + "' WHERE id = '" + str(uid) + "' "
-
-        try:
-            mycursor.execute(sql)
-            mydb.commit()
-            json_res = {"ok": True,}
-            print(json.dumps(json_res))
-            
-        except:
-            err()
+        mycursor.execute(sql)
+        mydb.commit()
+        json_res = {"ok": True,}
+        print(json.dumps(json_res))
+               
     else:
         err()
     mydb.close()
