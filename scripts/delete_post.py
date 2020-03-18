@@ -11,7 +11,6 @@ try:
         print(json.dumps(json_res))
         exit()
     
-
     form = cgi.FieldStorage()
     post_id = form.getvalue('post_id')
     uid = str(functions.get_user_id())
@@ -26,7 +25,7 @@ try:
         print(json.dumps(json_res))
         exit()
 
-    functions.set_change()
+    
 
     json_res = {"ok": True}
     print(json.dumps(json_res))

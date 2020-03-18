@@ -47,7 +47,7 @@ try:
                 mycursor.execute(insert_query)
                 mydb.commit()
                 mydb.close()
-                functions.set_change()
+             
                 print("Set-Cookie: LoggedIn=" + cookie_id + "; Path=/")
 
                 # Now, go to home page...

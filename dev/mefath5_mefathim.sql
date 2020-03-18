@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: פברואר 26, 2020 בזמן 09:51 AM
+-- Generation Time: מרץ 08, 2020 בזמן 10:28 AM
 -- גרסת שרת: 10.4.10-MariaDB
 -- PHP Version: 7.1.33
 
@@ -50,8 +50,7 @@ CREATE TABLE `sessions` (
   `ip_address` varchar(20) NOT NULL,
   `user_agent` varchar(256) NOT NULL,
   `logged_out` tinyint(1) NOT NULL DEFAULT 0,
-  `logout_time` datetime DEFAULT NULL,
-  `is_changes` int(1) NOT NULL DEFAULT 1
+  `logout_time` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

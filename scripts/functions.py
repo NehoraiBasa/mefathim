@@ -82,13 +82,7 @@ def check_logged():
         return True
     else:
         return False
-def set_change():
-    time_before = (datetime.datetime.now() - datetime.timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
-    update_query = "UPDATE sessions SET is_changes  = '1'  WHERE  logged_out = 0 AND update_time >= '" + time_before + "'"
-    mydb = connect()
-    cursor = mydb.cursor()
-    cursor.execute(update_query)
-    mydb.commit()
+
         
 
 

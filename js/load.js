@@ -116,7 +116,6 @@ function get_connected_users(){
 function print_post() {
 			
     $.get("scripts/get_posts.py", function(data){
-        console.log(data);
     let all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
         window.location.href = "login.html";
@@ -138,17 +137,18 @@ function print_post() {
             let post =$("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
                                 "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ sel.text +"</p>"+
-                                //"<div class='row'>"+
-                                "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
-                                "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
-                              //  "</div>"+
+                                "<div id ='botton_container' >"+
+                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
+                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
+                                "</div>"+
                             "</div>"+
                         "<div>");
             $(".posts").append(post);
               
             $('#delete_post'+id+'').click(function(){
                 
-                delete_post(id);
+              //  delete_post(id);
+                confirm_dlete(id);
                       
             });
             $('#edit_post'+id+'').click(function(){
@@ -183,12 +183,12 @@ function update_post(id,post_text) {
         text: post_text,
         }, function(){
             print_post();
-            interval = setInterval( refresh , 10000);
+            set_refresh();
         });
 }
 
 function edit_post(id,sel) {
-    clearInterval(interval);
+    stop_refresh();
     
     let val = sel.text;
     let write_post=$('<div class="container" id="container_edit_post" ">'+
@@ -204,30 +204,83 @@ function edit_post(id,sel) {
     $('#container_post'+id+'').find('#cancel').click(function() {
             $('#container_post'+id+'').find('#post').show();
             $('#container_post'+id+'').find('#container_edit_post').remove();
-            interval = setInterval( refresh , 10000);
+            set_refresh();
     });
     $('#container_post'+id+'').find('#send').click(function() {
         val=  $('#container_post'+id+'').find('#new_text').val(),
-        update_post(id,val);                
+        confirm_edit(id,val);                
     });
 
 }
 
+
+function confirm_dlete(id)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class="container confirm_container">'+
+            '<h1>מחיקת פוסט</h1>'+
+            '<p>אתה בטוח שברצונך למחוק את הפוסט</p>'+
+            '<div class="clearfix">'+
+                '<button type="button" id="cancel_del" class="cancelbtn">לא</button>'+
+                '<button type="button" id = "del_post" class="deletebtn">כן אני בטוח</button>'+
+            '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('#cancel_del').click(function() {
+        $(".confirm_box").remove();
+        set_refresh();
+    });
+    $('#del_post').click(function() {
+        delete_post(id);
+        $(".confirm_box").remove();
+        set_refresh();
+    });
+}
+
+function confirm_edit(id,val)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class="confirm_container container">'+
+        '<h1>עריכת פוסט</h1>'+
+        '<p>אתה בטוח שברצונך לערוך את הפוסט</p>'+
+        '<div class="clearfix">'+
+            '<button type="button" id="cancel_edit" class="cancelbtn">לא</button>'+
+            '<button type="button" id = "send_edit" class="deletebtn">כן אני בטוח</button>'+
+        '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('#cancel_edit').click(function() {
+        $(".confirm_box").remove();
+       
+    });
+    $('#send_edit').click(function() {
+        update_post(id,val);
+        $(".confirm_box").remove();
+        set_refresh()
+    });
+}
+
+
+
+function set_refresh(){
+    interval = setInterval( refresh , 10000);
+}
+function stop_refresh(){
+    clearInterval(interval);
+}
+
+
 function refresh()
 {
-    
-    $.post("scripts/check_changes.py", function(data){
-        let data_changes = JSON.parse(data);
-            if (data_changes.ok == false) {
-                window.location.href = "login.html";
-            }
-            else if (data_changes.is_changes==false) {return;}
-            else {
-                print_post();
-                get_connected_users() ;
-            }
-
-
-        });
+    print_post();
+    get_connected_users() ;
 
 }
