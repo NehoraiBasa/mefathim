@@ -138,9 +138,9 @@ nav {
 #short_btn {
     width: 75%;
 }
-.post_text {
-    font-size: 30px;
 
+#post{
+    overflow: auto;
 }
 #arial {
     font-family: 'Arial', Helvetica, sans-serif;
@@ -266,7 +266,7 @@ hr {
 .new_post {
     height: 200px;
     width: 100%;
-    color: #2055d0;
+    /* color: #2055d0; */
     
 }
 
@@ -292,7 +292,8 @@ hr {
     
     white-space: pre-line;
     text-align: right;
-    overflow: auto;
+    /* overflow: auto; */
+
 
 	
     

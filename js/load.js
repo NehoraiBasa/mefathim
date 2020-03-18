@@ -81,10 +81,11 @@ function buildnavbar(){
     }
 }
 
-
+var data_conected_users;
 function get_connected_users(){
-    
     $.get("scripts/users_get.py", function(result){
+        if (data_conected_users === result) {  return;  }
+        data_conected_users = result;
         var users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";
@@ -113,9 +114,11 @@ function get_connected_users(){
         }
     });
 }
+var data_posts;
 function print_post() {
-			
     $.get("scripts/get_posts.py", function(data){
+        if (data_posts===data){  return;  }
+        data_posts=data;
     let all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
         window.location.href = "login.html";
@@ -189,7 +192,6 @@ function update_post(id,post_text) {
 
 function edit_post(id,sel) {
     stop_refresh();
-    
     let val = sel.text;
     let write_post=$('<div class="container" id="container_edit_post" ">'+
                         '<textarea class="new_post " id="new_text" placeholder="פרסם פוסט" >'+val+'</textarea><br>'+   
@@ -269,7 +271,7 @@ function confirm_edit(id,val)
 }
 
 
-
+var interval;
 function set_refresh(){
     interval = setInterval( refresh , 10000);
 }
