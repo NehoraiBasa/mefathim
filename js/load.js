@@ -114,6 +114,7 @@ function get_connected_users(){
         }
     });
 }
+
 var data_posts;
 function print_post() {
     $.get("scripts/get_posts.py", function(data){
@@ -128,10 +129,13 @@ function print_post() {
     for (x in all_posts.data)
     {
         let sel = all_posts.data[x];
+        text = sel.text;
+        text = escape_tags(text);
+        text = linkify(text);
         if (sel.owner==false){
             let post = $(  "<div class=' show_post' style='background-color: ;'>"+
                                 "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
-                                "<p class='post container'> "+ sel.text +"</p>"+
+                                "<p class='post container'> "+ text +"</p>"+
                             "</div>");
                 $(".posts").append(post);
         }
@@ -139,7 +143,7 @@ function print_post() {
             let id = sel.post_id;
             let post =$("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
-                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ sel.text +"</p>"+
+                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ text +"</p>"+
                                 "<div id ='botton_container' >"+
                                     "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
                                     "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
@@ -285,4 +289,26 @@ function refresh()
     print_post();
     get_connected_users() ;
 
+}
+
+
+
+function linkify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+    
+    return text.replace(urlRegex, function(url) {
+        return '<a href="' + url + '">' + url + '</a>';
+    });
+}
+
+
+
+
+function escape_tags(text) {
+    let tagRegex = /(<)/g; 
+    text = text.replace(tagRegex,"&lt")
+    tagRegex = /(>)/g;
+    text = text.replace(tagRegex,"&gt")
+    return text;
+  
 }
