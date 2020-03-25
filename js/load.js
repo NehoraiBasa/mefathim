@@ -81,10 +81,11 @@ function buildnavbar(){
     }
 }
 
-
+var data_conected_users;
 function get_connected_users(){
-    
     $.get("scripts/users_get.py", function(result){
+        if (data_conected_users === result) {  return;  }
+        data_conected_users = result;
         var users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";
@@ -113,10 +114,12 @@ function get_connected_users(){
         }
     });
 }
+
+var data_posts;
 function print_post() {
-			
     $.get("scripts/get_posts.py", function(data){
-        console.log(data);
+        if (data_posts===data){  return;  }
+        data_posts=data;
     let all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
         window.location.href = "login.html";
@@ -126,10 +129,13 @@ function print_post() {
     for (x in all_posts.data)
     {
         let sel = all_posts.data[x];
+        text = sel.text;
+        text = escape_tags(text);
+        text = linkify(text);
         if (sel.owner==false){
             let post = $(  "<div class=' show_post' style='background-color: ;'>"+
                                 "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
-                                "<p class='post container'> "+ sel.text +"</p>"+
+                                "<p class='post container'> "+ text +"</p>"+
                             "</div>");
                 $(".posts").append(post);
         }
@@ -137,18 +143,19 @@ function print_post() {
             let id = sel.post_id;
             let post =$("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
-                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ sel.text +"</p>"+
-                                //"<div class='row'>"+
-                                "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
-                                "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
-                              //  "</div>"+
+                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ text +"</p>"+
+                                "<div id ='botton_container' >"+
+                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
+                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
+                                "</div>"+
                             "</div>"+
                         "<div>");
             $(".posts").append(post);
               
             $('#delete_post'+id+'').click(function(){
                 
-                delete_post(id);
+              //  delete_post(id);
+                confirm_dlete(id);
                       
             });
             $('#edit_post'+id+'').click(function(){
@@ -183,13 +190,12 @@ function update_post(id,post_text) {
         text: post_text,
         }, function(){
             print_post();
-            interval = setInterval( refresh , 10000);
+            set_refresh();
         });
 }
 
 function edit_post(id,sel) {
-    clearInterval(interval);
-    
+    stop_refresh();
     let val = sel.text;
     let write_post=$('<div class="container" id="container_edit_post" ">'+
                         '<textarea class="new_post " id="new_text" placeholder="פרסם פוסט" >'+val+'</textarea><br>'+   
@@ -204,30 +210,105 @@ function edit_post(id,sel) {
     $('#container_post'+id+'').find('#cancel').click(function() {
             $('#container_post'+id+'').find('#post').show();
             $('#container_post'+id+'').find('#container_edit_post').remove();
-            interval = setInterval( refresh , 10000);
+            set_refresh();
     });
     $('#container_post'+id+'').find('#send').click(function() {
         val=  $('#container_post'+id+'').find('#new_text').val(),
-        update_post(id,val);                
+        confirm_edit(id,val);                
     });
 
 }
 
+
+function confirm_dlete(id)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class="container confirm_container">'+
+            '<h1>מחיקת פוסט</h1>'+
+            '<p>אתה בטוח שברצונך למחוק את הפוסט</p>'+
+            '<div class="clearfix">'+
+                '<button type="button" id="cancel_del" class="cancelbtn">לא</button>'+
+                '<button type="button" id = "del_post" class="deletebtn">כן אני בטוח</button>'+
+            '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('#cancel_del').click(function() {
+        $(".confirm_box").remove();
+        set_refresh();
+    });
+    $('#del_post').click(function() {
+        delete_post(id);
+        $(".confirm_box").remove();
+        set_refresh();
+    });
+}
+
+function confirm_edit(id,val)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class="confirm_container container">'+
+        '<h1>עריכת פוסט</h1>'+
+        '<p>אתה בטוח שברצונך לערוך את הפוסט</p>'+
+        '<div class="clearfix">'+
+            '<button type="button" id="cancel_edit" class="cancelbtn">לא</button>'+
+            '<button type="button" id = "send_edit" class="deletebtn">כן אני בטוח</button>'+
+        '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('#cancel_edit').click(function() {
+        $(".confirm_box").remove();
+       
+    });
+    $('#send_edit').click(function() {
+        update_post(id,val);
+        $(".confirm_box").remove();
+        set_refresh()
+    });
+}
+
+
+var interval;
+function set_refresh(){
+    interval = setInterval( refresh , 10000);
+}
+function stop_refresh(){
+    clearInterval(interval);
+}
+
+
 function refresh()
 {
+    print_post();
+    get_connected_users() ;
+
+}
+
+
+
+function linkify(text) {
+    var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
     
-    $.post("scripts/check_changes.py", function(data){
-        let data_changes = JSON.parse(data);
-            if (data_changes.ok == false) {
-                window.location.href = "login.html";
-            }
-            else if (data_changes.is_changes==false) {return;}
-            else {
-                print_post();
-                get_connected_users() ;
-            }
+    return text.replace(urlRegex, function(url) {
+        return '<a href="' + url + '">' + url + '</a>';
+    });
+}
 
 
-        });
 
+
+function escape_tags(text) {
+    let tagRegex = /(<)/g; 
+    text = text.replace(tagRegex,"&lt")
+    tagRegex = /(>)/g;
+    text = text.replace(tagRegex,"&gt")
+    return text;
+  
 }

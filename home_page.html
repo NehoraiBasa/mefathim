@@ -43,11 +43,11 @@
 
 
         <script>
-            let interval;
+           
             $(document).ready(function(){
                 buildnavbar();
                 get_connected_users();
-                interval = setInterval( refresh , 10000);
+                set_refresh();
                //myVar = setInterval(alertFunc, 2000, "First parameter", "Second parameter");
             });
 
@@ -76,6 +76,7 @@
 
 
         </script>
+        
 		
     </body>
     </html>

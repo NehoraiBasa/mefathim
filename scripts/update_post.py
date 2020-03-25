@@ -27,7 +27,7 @@ try:
         print(json.dumps(json_res))
         exit()
 
-    functions.set_change()
+    
 
     json_res = {"ok": True}
     print(json.dumps(json_res))

@@ -24,7 +24,7 @@ try:
     cursor.execute(insert_query)
     mydb.commit() 
     
-    functions.set_change()
+    
 
     json_res = {"ok": True}
     print(json.dumps(json_res))
