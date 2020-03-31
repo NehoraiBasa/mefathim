@@ -118,6 +118,7 @@ function get_connected_users(){
 var data_posts;
 function print_post() {
     $.get("scripts/get_posts.py", function(data){
+        console.log(data);
         if (data_posts===data){  return;  }
         data_posts=data;
     let all_posts = JSON.parse(data);
@@ -132,18 +133,31 @@ function print_post() {
         text = sel.text;
         text = escape_tags(text);
         text = linkify(text);
+        let id = sel.post_id;
         if (sel.owner==false){
-            let post = $(  "<div class=' show_post' style='background-color: ;'>"+
+            let post = $("<div class=' show_post' id='container_post"+id+"'>"+
+                            "<div style='background-color: ;'>"+
                                 "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
                                 "<p class='post container'> "+ text +"</p>"+
-                            "</div>");
+                                "<div id ='botton_container' >"+
+                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='hide_post_btn'>הסתר פוסט </button>"+
+                                "</div>"+
+                            "</div>"+
+                        "</div>");
                 $(".posts").append(post);
+
+                $('#container_post'+id+'').find('#hide_post_btn').click(function() {
+                    let pid = sel.post_id;
+                    confirm_hide(pid);                
+                });
+
         }
          else{
-            let id = sel.post_id;
+           
             let post =$("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
-                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p><p id='post'class='text'> "+ text +"</p>"+
+                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
+                                "<p id='post'class='text'> "+ text +"</p>"+
                                 "<div id ='botton_container' >"+
                                     "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
                                     "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
@@ -274,6 +288,44 @@ function confirm_edit(id,val)
     });
 }
 
+function confirm_hide(pid)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class="confirm_container container">'+
+        '<h1>הסתרת פוסט</h1>'+
+        '<p>אתה בטוח שברצונך להסתיר  את הפוסט<br>לא תוכל לבטל פעולה זו בעתיד </p>'+
+        '<div class="clearfix">'+
+            '<button type="button" id="cancel" class="cancelbtn">לא</button>'+
+            '<button type="button" id = "hide_post" class="deletebtn">כן אני בטוח</button>'+
+        '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('.cancelbtn').click(function() {
+        $(".confirm_box").remove();
+    });
+    $('#hide_post').click(function() {
+        hide_post(pid);
+        $(".confirm_box").remove();
+        set_refresh()
+    });
+}
+
+function hide_post(pid){
+    $.post("scripts/hide_post.py",
+    {
+    post_id:pid,
+    
+    }, function(){
+        print_post();
+    });
+
+}
+
+
 
 var interval;
 function set_refresh(){
@@ -294,6 +346,8 @@ function refresh()
 
 
 function linkify(text) {
+    text = String(text);
+
     var urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
     
     return text.replace(urlRegex, function(url) {
@@ -305,6 +359,9 @@ function linkify(text) {
 
 
 function escape_tags(text) {
+
+    text = String(text);
+
     let tagRegex = /(<)/g; 
     text = text.replace(tagRegex,"&lt")
     tagRegex = /(>)/g;
