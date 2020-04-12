@@ -171,10 +171,12 @@ Was taken from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_del
 
 /* Add padding and center-align text to the container */
 .confirm_container {
+  width: 400px;
   padding: 16px;
   text-align: center;
   background-color: white;
-  width: 50%;
+  margin: auto;
+  /* width: 50%; */
   
 }
 
@@ -316,6 +318,18 @@ hr {
     font-family: 'Varela Round', sans-serif;
     color:white;
     background-color: rgb(41, 166, 216);
+    
+  }
+  .post_button {
+    width:auto;
+    margin: 4px 1px;
+    border-radius: 3px; 
+    font-family: inherit;
+    font-size: 11px;
+    /* line-height: inherit; */
+
+	padding:5px 4px;
+	
     
   }
 

@@ -81,7 +81,7 @@ function buildnavbar(){
     }
 }
 
-var data_conected_users;
+let data_conected_users;
 function get_connected_users(){
     $.get("scripts/users_get.py", function(result){
         if (data_conected_users === result) {  return;  }
@@ -115,11 +115,13 @@ function get_connected_users(){
     });
 }
 
-var data_posts;
+let data_posts="";
 function print_post() {
     $.get("scripts/get_posts.py", function(data){
-        console.log(data);
-        if (data_posts===data){  return;  }
+        
+        if (data_posts === data) {
+            return;  
+        }
         data_posts=data;
     let all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
@@ -139,8 +141,8 @@ function print_post() {
                             "<div style='background-color: ;'>"+
                                 "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
                                 "<p class='post container'> "+ text +"</p>"+
-                                "<div id ='botton_container' >"+
-                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='hide_post_btn'>הסתר פוסט </button>"+
+                                "<div id ='button_container' >"+
+                                    "<button class='post_button'  id='hide_post_btn'>הסתר</button>"+
                                 "</div>"+
                             "</div>"+
                         "</div>");
@@ -158,9 +160,9 @@ function print_post() {
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
                                 "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
                                 "<p id='post'class='text'> "+ text +"</p>"+
-                                "<div id ='botton_container' >"+
-                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='delete_post"+id+"'>מחק פוסט</button>"+
-                                    "<button class='d_button'  class='btn btn-primary btn-xs' id='edit_post"+id+"'>ערוך פוסט</button>"+
+                                "<div id ='button_container' >"+
+                                    "<button class='post_button'  id='delete_post"+id+"'>מחק</button>"+
+                                    "<button class='post_button'  id='edit_post"+id+"'>ערוך </button>"+
                                 "</div>"+
                             "</div>"+
                         "<div>");
@@ -214,15 +216,17 @@ function edit_post(id,sel) {
     let write_post=$('<div class="container" id="container_edit_post" ">'+
                         '<textarea class="new_post " id="new_text" placeholder="פרסם פוסט" >'+val+'</textarea><br>'+   
                         "<div  class='row' >"+                 
-                            '<button  class="col-5 align-top"  id="send">שלח</button>'+
-                            '<button  class="col-6 align-top"  id="cancel">בטל</button>'+
+                            '<button  class="post_button"  id="send">שלח</button>'+
+                            '<button  class="post_button"  id="cancel">בטל</button>'+
                         "</div>"+
                     '</div>');
 
     $('#container_post'+id+'').find('#post').hide();
+    $('#container_post'+id+'').find('#button_container').hide(); 
     $('#container_post'+id+'').append ($(write_post));
     $('#container_post'+id+'').find('#cancel').click(function() {
             $('#container_post'+id+'').find('#post').show();
+            $('#container_post'+id+'').find('#button_container').show(); 
             $('#container_post'+id+'').find('#container_edit_post').remove();
             set_refresh();
     });
@@ -239,9 +243,9 @@ function confirm_dlete(id)
     stop_refresh();
     let a =$(''+
     '<div  class="modal confirm_box">'+
-        '<div class="container confirm_container">'+
+        '<div class="confirm_container">'+
             '<h1>מחיקת פוסט</h1>'+
-            '<p>אתה בטוח שברצונך למחוק את הפוסט</p>'+
+            '<p>אתה בטוח?</p>'+
             '<div class="clearfix">'+
                 '<button type="button" id="cancel_del" class="cancelbtn">לא</button>'+
                 '<button type="button" id = "del_post" class="deletebtn">כן אני בטוח</button>'+
@@ -266,9 +270,9 @@ function confirm_edit(id,val)
     stop_refresh();
     let a =$(''+
     '<div  class="modal confirm_box">'+
-        '<div class="confirm_container container">'+
+        '<div class="confirm_container">'+
         '<h1>עריכת פוסט</h1>'+
-        '<p>אתה בטוח שברצונך לערוך את הפוסט</p>'+
+        '<p>אתה בטוח?</p>'+
         '<div class="clearfix">'+
             '<button type="button" id="cancel_edit" class="cancelbtn">לא</button>'+
             '<button type="button" id = "send_edit" class="deletebtn">כן אני בטוח</button>'+
@@ -293,9 +297,9 @@ function confirm_hide(pid)
     stop_refresh();
     let a =$(''+
     '<div  class="modal confirm_box">'+
-        '<div class="confirm_container container">'+
+        '<div class=" confirm_container">'+
         '<h1>הסתרת פוסט</h1>'+
-        '<p>אתה בטוח שברצונך להסתיר  את הפוסט<br>לא תוכל לבטל פעולה זו בעתיד </p>'+
+        '<p>אתה בטוח?<br>לא תוכל לבטל פעולה זו בעתיד </p>'+
         '<div class="clearfix">'+
             '<button type="button" id="cancel" class="cancelbtn">לא</button>'+
             '<button type="button" id = "hide_post" class="deletebtn">כן אני בטוח</button>'+
@@ -313,6 +317,7 @@ function confirm_hide(pid)
         set_refresh()
     });
 }
+
 
 function hide_post(pid){
     $.post("scripts/hide_post.py",

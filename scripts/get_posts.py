@@ -4,6 +4,7 @@ import cgi, sys, codecs,os
 import json
 import mefath5_connect
 import functions
+import datetime
 try:
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     print ("Content-type: text/plain; charset=UTF-8\n\n")
@@ -42,8 +43,8 @@ try:
             y =True
         else:
             y = False
-
-        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],"post_id": x[3],"owner":y,}
+        standardized_time =  (x[2] + datetime.timedelta( hours=7)).strftime('%Y-%m-%d %H:%M:%S')
+        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": standardized_time,"post_id": x[3],"owner":y,}
         posts.append(post)
 
     json_res = {"ok": True, "data": posts}
