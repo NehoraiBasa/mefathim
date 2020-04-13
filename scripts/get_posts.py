@@ -43,8 +43,8 @@ try:
             y =True
         else:
             y = False
-        standardized_time =  (x[2] + datetime.timedelta( hours=7)).strftime('%Y-%m-%d %H:%M:%S')
-        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": standardized_time,"post_id": x[3],"owner":y,}
+        
+        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],"post_id": x[3],"owner":y,}
         posts.append(post)
 
     json_res = {"ok": True, "data": posts}

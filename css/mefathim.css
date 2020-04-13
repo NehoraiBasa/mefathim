@@ -387,7 +387,7 @@ hr {
     #logo {
         height: 90px;
         width: 300px;
-        margin-left: 30%;
+        /* margin-left: 30%; */
     }
     .forms {
         margin-left: 20%;
@@ -406,8 +406,8 @@ hr {
     #logo {
         height: 80px;
         width: 250px;
-        margin-left: 20%;
-        margin-right: 20%;
+        /* margin-left: 20%; */
+        /* margin-right: 20%; */
     }
     .forms {
         margin-left: 10%;

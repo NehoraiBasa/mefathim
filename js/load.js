@@ -136,10 +136,24 @@ function print_post() {
         text = escape_tags(text);
         text = linkify(text);
         let id = sel.post_id;
+        /////////////https://stackoverflow.com/questions/6525538/convert-utc-date-time-to-local-date-time////
+        let d = new Date(sel.writing_time);
+        function convertUTCDateToLocalDate(date) {
+            let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+        
+            let offset = date.getTimezoneOffset() / 60;
+            let hours = date.getHours();
+        
+            newDate.setHours(hours - offset);
+        
+            return newDate;   
+        }
+        let local_time = convertUTCDateToLocalDate( new Date(sel.writing_time));
+        local_time = local_time.toLocaleString();
         if (sel.owner==false){
             let post = $("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div style='background-color: ;'>"+
-                                "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
+                                "<p class='details'>    מאת: "+ sel.nickname +"  |   "+ local_time +"</p>"+
                                 "<p class='post container'> "+ text +"</p>"+
                                 "<div id ='button_container' >"+
                                     "<button class='post_button'  id='hide_post_btn'>הסתר</button>"+
@@ -158,7 +172,7 @@ function print_post() {
            
             let post =$("<div class=' show_post' id='container_post"+id+"'>"+
                             "<div  id='show_post"+id+"' style='background-color: ;'>"+
-                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ sel.writing_time +"</p>"+
+                                "<p class='details'>  מאת: "+ sel.nickname +"  |   "+ local_time +"</p>"+
                                 "<p id='post'class='text'> "+ text +"</p>"+
                                 "<div id ='button_container' >"+
                                     "<button class='post_button'  id='delete_post"+id+"'>מחק</button>"+
