@@ -171,12 +171,10 @@ Was taken from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_del
 
 /* Add padding and center-align text to the container */
 .confirm_container {
-  width: 400px;
   padding: 16px;
   text-align: center;
   background-color: white;
-  margin: auto;
-  /* width: 50%; */
+  width: 50%;
   
 }
 
@@ -320,18 +318,6 @@ hr {
     background-color: rgb(41, 166, 216);
     
   }
-  .post_button {
-    width:auto;
-    margin: 4px 1px;
-    border-radius: 3px; 
-    font-family: inherit;
-    font-size: 11px;
-    /* line-height: inherit; */
-
-	padding:5px 4px;
-	
-    
-  }
 
 .card-container.card {
     max-width: 350px;
@@ -387,7 +373,7 @@ hr {
     #logo {
         height: 90px;
         width: 300px;
-        /* margin-left: 30%; */
+        margin-left: 30%;
     }
     .forms {
         margin-left: 20%;
@@ -406,8 +392,8 @@ hr {
     #logo {
         height: 80px;
         width: 250px;
-        /* margin-left: 20%; */
-        /* margin-right: 20%; */
+        margin-left: 20%;
+        margin-right: 20%;
     }
     .forms {
         margin-left: 10%;

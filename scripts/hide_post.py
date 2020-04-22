@@ -15,18 +15,11 @@ try:
     pid = form.getvalue('post_id')
     uid = str(functions.get_user_id())
     try:
-        select_query = "SELECT user_id  FROM  posts WHERE post_id = '"+pid+"'"
-        mydb = mefath5_connect.get_connect()
-        cursor = mydb.cursor()
-        cursor.execute(select_query)
-        post_uid = cursor.fetchall()
-        if post_uid == uid:
-            json_res = {"ok": False}
-            print(json.dumps(json_res))
-            exit()
+
 
         insert_query = "INSERT INTO hidden_posts (uid,pid) VALUES ('"+ uid +"','"+ pid +"')"
-        # cursor = mydb.cursor() 
+        mydb = mefath5_connect.get_connect()
+        cursor = mydb.cursor() 
         cursor.execute(insert_query)
         mydb.commit() 
     
