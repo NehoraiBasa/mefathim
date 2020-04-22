@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Alef|Varela+Round&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="img/icons/logo_icon.png">
+        <link rel="stylesheet" href="css/mefathim.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="js/load.js"></script>
+        <title>חברים</title>
+    </head>
+    <body dir="rtl">
+        <nav id="nav" class="navbar navbar-expand-sm bg-light navbar-light"></nav>
+
+        <h1>ניהול חברים</h1>
+        
+    
+		
+       
+        <div  class="container" >
+            
+            <div class="row">
+                <div  id="all_users" class="col-3 text-top">
+                    
+                        <div class=''  style='text-align: center; width:120px'>כל המשתמשים</div> 
+                        <div id="users_container" > </div> 
+                </div>
+
+                <div  id="waiting_for_approval" class="col-3 text-top">
+                    <div class=' ' style='text-align: center; width:120px'>ממתינים לאישור</div> 
+                    <div id="users_pending_container" > </div>
+                </div>
+                <div  id="my_friends" class="col-3 text-top">
+                    <div class=' ' style='text-align: center; width:120px'>החברים שלי</div> 
+                    <div id="friends_container" > </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <script>
+           
+            $(document).ready(function(){
+                buildnavbar();
+                get_friends();
+                get_all_users();
+                get_pending_requests();
+             
+            });
+
+         
+          
+
+
+        </script>
+        
+		
+    </body>
+    </html>s
