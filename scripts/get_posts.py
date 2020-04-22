@@ -4,7 +4,6 @@ import cgi, sys, codecs,os
 import json
 import mefath5_connect
 import functions
-import datetime
 try:
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     print ("Content-type: text/plain; charset=UTF-8\n\n")
@@ -43,7 +42,7 @@ try:
             y =True
         else:
             y = False
-        
+
         post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],"post_id": x[3],"owner":y,}
         posts.append(post)
 

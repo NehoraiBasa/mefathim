@@ -4,7 +4,6 @@ import cgi, sys, codecs, os
 import json
 import mefath5_connect
 import functions
-import datetime
 try:
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     print ("Content-type: text/plain; charset=UTF-8\n\n")
@@ -18,8 +17,8 @@ try:
         print(json.dumps(json_res))
         exit()
         
-    now = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    insert_query = "INSERT INTO posts (user_id,post_text,write_time) VALUES ('"+ uid +"','"+ text +"','"+ now +"')"
+   
+    insert_query = "INSERT INTO posts (user_id,post_text) VALUES ('"+ uid +"','"+ text +"')"
     mydb = mefath5_connect.get_connect()
     cursor = mydb.cursor() 
     cursor.execute(insert_query)
