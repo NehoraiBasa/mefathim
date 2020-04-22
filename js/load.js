@@ -30,7 +30,7 @@ function check_connect(){
 
 function buildnavbar(){
     let user_id = "";
-    objects=[];
+    let objects=[];
 
     $.get("scripts/user_data.py", function(result){
         user_data = JSON.parse(result);
@@ -54,6 +54,8 @@ function buildnavbar(){
         objects[2]="preferences.html";
         objects[3]="שינוי סיסמה";
         objects[4]="change_password.html";
+        objects[5]="חברים";
+        objects[6]="friendships.html";
 
 
         navbar='';
@@ -353,13 +355,17 @@ function set_refresh(){
 function stop_refresh(){
     clearInterval(interval);
 }
-
-
 function refresh()
 {
     print_post();
     get_connected_users() ;
 
+}
+function refresh_friendsships_p()
+{
+    get_all_users();
+    get_pending_requests();
+    get_friends();
 }
 
 
@@ -387,4 +393,179 @@ function escape_tags(text) {
     text = text.replace(tagRegex,"&gt")
     return text;
   
+}
+function get_friends(){
+    $.get("scripts/get_friends.py", function(result){
+        let users = JSON.parse(result);
+        if (users.ok == false) {
+          window.location.href = "login.html";
+        }else {
+            $("#friends_container").empty();
+             let user;
+            for (x in users.data) {
+
+                sel = users.data[x];
+                let id = sel.id;
+                img_num = sel.picture_number;
+                if (img_num == null){
+                    img_num = "22";
+                }
+
+                if (sel.id == users.id) {
+                    continue;
+                } else {
+
+                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
+                                    "<div class=' user_card row' >"+
+                                    "<div class='col-8 text-top'>"+
+                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                                        "<div style='width:100%;text-align: center;'>"+
+                                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                                        "</div>"+
+                                    "</div>"+
+                        
+                                    // "<div class='col-4 text-top'>"+
+                                    //     "<button class=' post_button'  id='friend_request' ></button>"+
+                                    // "</div>"+
+                                "</div>"+
+                            "</div>";
+                }
+            
+                $("#friends_container").append(user);
+            
+                // $("#user"+id+"").find('#friend_request').click(function() {
+                    
+                //     send_friend_request(id)                
+                // });
+            }    
+        }
+    });
+}
+
+function get_all_users(){
+    $.get("scripts/get_all_users.py", function(result){
+        if (data_conected_users === result) {  return;  }
+        // data_conected_users = result;
+        let users = JSON.parse(result);
+        if (users.ok == false) {
+          window.location.href = "login.html";
+        }else {
+            $("#users_container").empty();
+            // let faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כל המשתמשים</li>";
+             let user;
+            for (x in users.data) {
+
+                sel = users.data[x];
+                let id = sel.id;
+                img_num = sel.picture_number;
+                if (img_num == null){
+                    img_num = "22";
+                }
+
+                if (sel.id == users.id) {
+                    continue;
+                } else {
+
+                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
+                                    "<div class=' user_card row' >"+
+                                    "<div class='col-8 text-top'>"+
+                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                                        "<div style='width:100%;text-align: center;'>"+
+                                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                                        "</div>"+
+                                    "</div>"+
+                        
+                                    "<div class='col-4 text-top'>"+
+                                        "<button class=' post_button'  id='friend_request' >הצע חברות</button>"+
+                                    "</div>"+
+                                "</div>"+
+                            "</div>";
+                }
+            
+                $("#users_container").append(user);
+            
+                $("#user"+id+"").find('#friend_request').click(function() {
+                    
+                    send_friend_request(id)                
+                });
+                if (sel.status > 0 ) {
+                    $("#user"+id+"").find('#friend_request').attr("disabled", true).css('opacity',0.5);
+                    
+                }
+            }    
+        }
+    });
+}
+
+
+function get_pending_requests(){
+    $.get("scripts/get_pending_requests.py", function(result){
+        if (data_conected_users === result) {  return;  }
+        // data_conected_users = result;
+        let users = JSON.parse(result);
+        if (users.ok == false) {
+          window.location.href = "login.html";
+        }else {
+            $("#users_pending_container").empty();
+            // let faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כל המשתמשים</li>";
+             let user;
+            for (x in users.data) {
+
+                sel = users.data[x];
+                let id = sel.id;
+                img_num = sel.picture_number;
+                if (img_num == null){
+                    img_num = "22";
+                }
+
+                if (sel.id == users.id) {
+                    continue;
+                } else {
+
+                    user = "<div class=' ' id = 'pending_user"+id+"'   style='width:160px'>"+
+                                    "<div class=' user_card row' >"+
+                                    "<div class='col-8 text-top'>"+
+                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                                        "<div style='width:100%;text-align: center;'>"+
+                                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                                        "</div>"+
+                                    "</div>"+
+                        
+                                    "<div class='col-4 text-top'>"+
+                                        "<button class=' post_button'  id='friend_request' >אשר חברות</button>"+
+                                    "</div>"+
+                                "</div>"+
+                            "</div>";
+                }
+            
+                $("#users_pending_container").append(user);
+            
+                $("#pending_user"+id+"").find('#friend_request').click(function() {
+                    
+                    confirm_friend_request(id);               
+                });
+            }    
+        }
+    });
+}
+
+
+
+function send_friend_request(friend_id) {
+    
+    $.post("scripts/send_friend_request.py",
+        {
+        friend_id: friend_id,
+        }, function(){
+            refresh_friendsships_p();
+        });
+}
+function confirm_friend_request(friend_id) {
+    
+    $.post("scripts/confirm_friend_request.py",
+        {
+        friend_id: friend_id,
+        }, function(){
+            refresh_friendsships_p();
+        });
 }
