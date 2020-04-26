@@ -400,7 +400,7 @@ function get_friends(){
         if (users.ok == false) {
           window.location.href = "login.html";
         }else {
-            $("#friends_container").empty();
+            $("#my_friends").empty();
              let user;
             for (x in users.data) {
 
@@ -431,7 +431,7 @@ function get_friends(){
                             "</div>";
                 }
             
-                $("#friends_container").append(user);
+                $("#my_friends").append(user);
             
                 // $("#user"+id+"").find('#friend_request').click(function() {
                     
@@ -450,7 +450,8 @@ function get_all_users(){
         if (users.ok == false) {
           window.location.href = "login.html";
         }else {
-            $("#users_container").empty();
+            $("#all_users").empty();
+            $("#my_requests").empty();
             // let faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כל המשתמשים</li>";
              let user;
             for (x in users.data) {
@@ -464,7 +465,7 @@ function get_all_users(){
 
                 if (sel.id == users.id) {
                     continue;
-                } else {
+                }else  if(sel.status == null) {
 
                     user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
                                     "<div class=' user_card row' >"+
@@ -480,18 +481,34 @@ function get_all_users(){
                                     "</div>"+
                                 "</div>"+
                             "</div>";
+                
+            
+                $("#all_users").append(user);
+                }else if (sel.status == 1 && sel.friend1==users.id){
+                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
+                                    "<div class=' user_card row' >"+
+                                    "<div class='col-8 text-top'>"+
+                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                                        "<div style='width:100%;text-align: center;'>"+
+                                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                                        "</div>"+
+                                    "</div>"+
+                        
+                                    // "<div class='col-4 text-top'>"+
+                                    //     "<button class=' post_button'  id='friend_request' >הצע חברות</button>"+
+                                    // "</div>"+
+                                "</div>"+
+                            "</div>";
+                        $("#my_requests").append(user);
                 }
-            
-                $("#users_container").append(user);
-            
                 $("#user"+id+"").find('#friend_request').click(function() {
                     
                     send_friend_request(id)                
                 });
-                if (sel.status > 0 ) {
-                    $("#user"+id+"").find('#friend_request').attr("disabled", true).css('opacity',0.5);
+                // if (sel.status > 0 ) {
+                //     $("#user"+id+"").find('#friend_request').attr("disabled", true).css('opacity',0.5);
                     
-                }
+                // }
             }    
         }
     });
