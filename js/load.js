@@ -186,7 +186,7 @@ function print_post() {
               
             $('#delete_post'+id+'').click(function(){
                 
-              //  delete_post(id);
+           
                 confirm_dlete(id);
                       
             });
@@ -361,7 +361,14 @@ function refresh()
     get_connected_users() ;
 
 }
-function refresh_friendsships_p()
+var interval_f;
+function set_refresh_f(){
+    interval_f = setInterval(refresh_friendsships_p , 10000);
+}
+// function stop_refresh_f(){
+//     clearInterval(interval_f);
+// }
+// function refresh_friendsships_p()
 {
     get_all_users();
     get_pending_requests();
