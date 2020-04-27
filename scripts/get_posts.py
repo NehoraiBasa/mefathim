@@ -17,10 +17,11 @@ try:
 
     uid = functions.get_user_id()
     posts=[]
-
+    my_friends_query = "SELECT friend1 FROM friends WHERE   status = 2 AND  friend2 = '"+str(uid)+"' UNION \
+                        SELECT friend2 FROM friends WHERE   status = 2 AND  friend1 = '"+str(uid)+"' "
     hidden_post_query="SELECT * FROM hidden_posts  " 
-    select_query = "SELECT nickname , post_text , write_time , post_id , user_id FROM users, posts WHERE users.id = posts.user_id AND posts.status=1 ORDER BY post_id DESC LIMIT 20 "
-    
+    select_query = "SELECT nickname , post_text , write_time , post_id , user_id FROM users, posts WHERE users.id = posts.user_id \
+         AND posts.status=1 HAVING user_id IN  ("+my_friends_query+") OR  user_id = '"+str(uid)+"'   ORDER BY post_id DESC LIMIT 20  "   
     mydb = mefath5_connect.get_connect()
     cursor = mydb.cursor()
     cursor.execute(select_query)

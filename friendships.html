@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Alef|Varela+Round&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="img/icons/logo_icon.png">
+        <link rel="stylesheet" href="css/mefathim.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="js/load.js"></script>
+        <title>חברים</title>
+    </head>
+    <body dir="rtl">
+        <nav id="nav" class="navbar navbar-expand-sm bg-light navbar-light"></nav>
+
+        <h1>ניהול חברים</h1>
+        
+    
+		
+       
+        <div  class="container" >
+            
+            <div class="row">
+                <div  id="all_users_container" class="col-3 text-top">
+                    
+                        <div  style='text-align: center; width:120px'>הצע חברות </div> 
+                        <div  id="all_users"></div>>
+                </div>
+
+                <div  id="my_requests_container" class="col-3 text-top">
+                    <div class=''  style='text-align: center; width:120px'>הבקשות שלי</div> 
+                    <div  id="my_requests" ></div>
+                </div>
+
+                <div  class="col-3 text-top">
+                    <div class=' ' style='text-align: center; width:120px'>אשר הצעות</div> 
+                    <div id="users_pending_container" > </div>
+                </div>
+
+                <div   class="col-3 text-top">
+                    <div class=' ' style='text-align: center; width:120px'>החברים שלי</div> 
+                    <div id="my_friends" > </div>
+                </div>
+
+            </div>
+        </div>
+        
+
+
+        <script>
+           
+            $(document).ready(function(){
+                buildnavbar();
+                get_friends();
+                get_all_users();
+                get_pending_requests();
+             
+            });
+            set_refresh_f()
+         
+          
+
+
+        </script>
+        
+		
+    </body>
+    </html>s

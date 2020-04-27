@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: אפריל 01, 2020 בזמן 12:19 PM
+-- Generation Time: אפריל 23, 2020 בזמן 06:28 PM
 -- גרסת שרת: 10.4.10-MariaDB
 -- PHP Version: 7.1.33
 
@@ -21,6 +21,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `mefath5_mefathim`
 --
+
+-- --------------------------------------------------------
+
+--
+-- מבנה טבלה עבור טבלה `friends`
+--
+
+CREATE TABLE `friends` (
+  `friend1` int(15) NOT NULL,
+  `friend2` int(15) NOT NULL,
+  `data_friendship` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -43,7 +56,7 @@ CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL,
   `user_id` int(30) NOT NULL,
   `post_text` text NOT NULL,
-  `write_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `write_time` datetime NOT NULL DEFAULT current_timestamp(),
   `status` int(5) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -140,6 +153,12 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 --
 -- Indexes for dumped tables
 --
+
+--
+-- אינדקסים לטבלה `friends`
+--
+ALTER TABLE `friends`
+  ADD UNIQUE KEY `friend2` (`friend1`,`friend2`) USING BTREE;
 
 --
 -- אינדקסים לטבלה `posts`
