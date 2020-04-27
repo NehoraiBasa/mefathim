@@ -368,8 +368,7 @@ function set_refresh_f(){
 // function stop_refresh_f(){
 //     clearInterval(interval_f);
 // }
-// function refresh_friendsships_p()
-{
+ function refresh_friendsships_p(){
     get_all_users();
     get_pending_requests();
     get_friends();
