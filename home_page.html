@@ -24,19 +24,32 @@
         <div  class="container" >
             
             <div class="row">
-            <div  id="now_logged" class="col-3 text-top"></div>
-                
-            <div class="col-5 align-top post_area">
-                <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
-                <div id="write_post" style="display: none;">
-                        <textarea val = "gg"class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
-                      <!--  </select>  !-->
-                        <button class="button" id="send">שלח</button>
+                <div  id="now_logged" class="col-3 text-top"></div>
+                    
+                <div class="col-5 align-top post_area">
+                    <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
+                    <div id="write_post" style="display: none;">
+                            <textarea val = "gg"class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
+                        <!--  </select>  !-->
+                        <div class="row"  id ='button_container'>
+                            <button class="post_button" id="send">שלח</button>
+                          
+                            <!-- <div> -->
+                        <p>
+                            <p>תפוצה: </p>
+                            <select id="circulation"  style="height: min-content; width: 90px">
+                                <option value="0">רק אני</option>
+                                <option value="1" selected="selected" >החברים</option>
+                                <option value="2">כולם</option>
+                            </select>
+                        </p>
+                        <!-- </div> -->
+                        </div>
                     </div>
-                    <hr/>
-                <div class="posts  "></div>
-              
-            </div>
+                        <hr/>
+                    <div class="posts  "></div>
+                
+                </div>
             </div>
         </div>
         
@@ -58,6 +71,7 @@
                     $.post("scripts/add_post.py",
                     {
                     text: $("#text").val(),
+                    circulation:$( "#circulation").val(),
                  
                     }, function()
 					{

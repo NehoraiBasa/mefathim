@@ -16,16 +16,18 @@ try:
     post_id = form.getvalue('post_id')
     post_text = form.getvalue('text')
     uid = str(functions.get_user_id())
-    try:
-        update_query = "UPDATE posts SET post_text = '"+post_text+"' WHERE  post_id = '" + post_id + "'AND user_id= '" + uid + "'" 
-        mydb = mefath5_connect.get_connect()
-        cursor = mydb.cursor()
-        cursor.execute(update_query)
-        mydb.commit()
-    except:
-        json_res = {"ok": False}
-        print(json.dumps(json_res))
-        exit()
+    circulation =  form.getvalue('circulation')
+# try:
+    update_query = "UPDATE posts SET post_text = '"+post_text+"',circulation='"+circulation+"' WHERE  post_id = '" + post_id + "'AND user_id= '" + uid + "'" 
+    mydb = mefath5_connect.get_connect()
+    cursor = mydb.cursor()
+
+    cursor.execute(update_query)
+    mydb.commit()
+# except:
+    # json_res = {"ok": False}
+    # print(json.dumps(json_res))
+    # exit()
 
     
 
