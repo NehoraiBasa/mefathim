@@ -240,8 +240,8 @@ function edit_post(id,sel) {
                             '<button  class="post_button"  id="send">שלח</button>'+
                             '<button  class="post_button"  id="cancel">בטל</button>'+
                             '<p>'+
-                            '   <p>תפוצה: </p>'+
-                            '   <select  id="circulation" style="height: min-content; width: 90px">'+
+                            '   <p style=" margin-left: 3px; margin-right: 16px;" >תפוצה: </p>'+
+                            '   <select  id="circulation"  style="height: min-content; padding: 2px; width: 95px">'+
                             '       <option value="0">רק אני</option>'+
                             '       <option value="1"  >החברים</option>'+
                             '       <option value="2">כולם</option>'+
