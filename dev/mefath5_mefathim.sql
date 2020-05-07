@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: אפריל 23, 2020 בזמן 06:28 PM
--- גרסת שרת: 10.4.10-MariaDB
--- PHP Version: 7.1.33
+-- Generation Time: May 06, 2020 at 09:35 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- מבנה טבלה עבור טבלה `friends`
+-- Table structure for table `friends`
 --
 
 CREATE TABLE `friends` (
@@ -38,7 +37,7 @@ CREATE TABLE `friends` (
 -- --------------------------------------------------------
 
 --
--- מבנה טבלה עבור טבלה `hidden_posts`
+-- Table structure for table `hidden_posts`
 --
 
 CREATE TABLE `hidden_posts` (
@@ -49,7 +48,7 @@ CREATE TABLE `hidden_posts` (
 -- --------------------------------------------------------
 
 --
--- מבנה טבלה עבור טבלה `posts`
+-- Table structure for table `posts`
 --
 
 CREATE TABLE `posts` (
@@ -57,13 +56,14 @@ CREATE TABLE `posts` (
   `user_id` int(30) NOT NULL,
   `post_text` text NOT NULL,
   `write_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `status` int(5) NOT NULL DEFAULT 1
+  `status` int(5) NOT NULL DEFAULT 1,
+  `circulation` int(15) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- מבנה טבלה עבור טבלה `sessions`
+-- Table structure for table `sessions`
 --
 
 CREATE TABLE `sessions` (
@@ -80,7 +80,7 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
--- מבנה טבלה עבור טבלה `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -103,7 +103,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- הוצאת מידע עבור טבלה `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `status`, `nickname`, `password_hash`, `salt`, `creation_date`, `gender`, `date_of_birth`, `city`, `country`, `phone_number`, `picture_number`) VALUES
@@ -155,25 +155,25 @@ INSERT INTO `users` (`id`, `email`, `first_name`, `middle_name`, `last_name`, `s
 --
 
 --
--- אינדקסים לטבלה `friends`
+-- Indexes for table `friends`
 --
 ALTER TABLE `friends`
   ADD UNIQUE KEY `friend2` (`friend1`,`friend2`) USING BTREE;
 
 --
--- אינדקסים לטבלה `posts`
+-- Indexes for table `posts`
 --
 ALTER TABLE `posts`
   ADD UNIQUE KEY `post_id` (`post_id`);
 
 --
--- אינדקסים לטבלה `sessions`
+-- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD KEY `update_time` (`update_time`);
 
 --
--- אינדקסים לטבלה `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),

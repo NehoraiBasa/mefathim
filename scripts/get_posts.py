@@ -20,22 +20,18 @@ try:
     my_friends_query = "SELECT friend1 FROM friends WHERE   status = 2 AND  friend2 = '"+str(uid)+"' UNION \
                         SELECT friend2 FROM friends WHERE   status = 2 AND  friend1 = '"+str(uid)+"' "
     hidden_post_query="SELECT * FROM hidden_posts  " 
-    select_query = "SELECT nickname , post_text , write_time , post_id , user_id FROM users, posts WHERE users.id = posts.user_id \
-         AND posts.status=1 HAVING user_id IN  ("+my_friends_query+") OR  user_id = '"+str(uid)+"'   ORDER BY post_id DESC LIMIT 20  "   
+    select_query = "SELECT nickname , post_text , write_time , post_id , user_id , circulation FROM users, posts\
+        WHERE users.id = posts.user_id AND posts.status = 1            \
+        HAVING (user_id IN ("+my_friends_query+") AND circulation = 1) \
+            OR circulation = 2                                         \
+            OR user_id =   '"+str(uid)+"'                              \
+        ORDER BY post_id DESC LIMIT 20   "   
+   
     mydb = mefath5_connect.get_connect()
     cursor = mydb.cursor()
     cursor.execute(select_query)
     post_data = cursor.fetchall()
-
-    cursor.execute(hidden_post_query)
-    hidden_posts = cursor.fetchall()
-   
-    # Removing hidden posts
-    for x in reversed( post_data ):
-        p_tuple = (x[3],uid)
-        if p_tuple in hidden_posts:
-           
-            post_data.remove(x)
+    # print(post_data)
 
     for x in post_data:
        
@@ -45,7 +41,7 @@ try:
         else:
             y = False
         
-        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],"post_id": x[3],"owner":y,}
+        post = {"nickname" : x[0] , "text" : x[1] ,"writing_time": x[2],"post_id": x[3],"owner":y,"circulation":x[5]}
         posts.append(post)
 
     json_res = {"ok": True, "data": posts}

@@ -179,6 +179,8 @@ function print_post() {
                                 "<div id ='button_container' >"+
                                     "<button class='post_button'  id='delete_post"+id+"'>מחק</button>"+
                                     "<button class='post_button'  id='edit_post"+id+"'>ערוך </button>"+
+                                    
+                                    
                                 "</div>"+
                             "</div>"+
                         "<div>");
@@ -191,8 +193,10 @@ function print_post() {
                       
             });
             $('#edit_post'+id+'').click(function(){
-                
+               
+
                 edit_post(id,sel);
+
                       
             });
             
@@ -220,6 +224,7 @@ function update_post(id,post_text) {
         {
         post_id: id,
         text: post_text,
+        circulation : $('#container_post'+id+'').find( "#circulation").val() ,
         }, function(){
             print_post();
             set_refresh();
@@ -234,12 +239,26 @@ function edit_post(id,sel) {
                         "<div  class='row' >"+                 
                             '<button  class="post_button"  id="send">שלח</button>'+
                             '<button  class="post_button"  id="cancel">בטל</button>'+
+                            '<p>'+
+                            '   <p>תפוצה: </p>'+
+                            '   <select  id="circulation" style="height: min-content; width: 90px">'+
+                            '       <option value="0">רק אני</option>'+
+                            '       <option value="1"  >החברים</option>'+
+                            '       <option value="2">כולם</option>'+
+                            '   </select>'+
+                            '</p>'+
                         "</div>"+
-                    '</div>');
 
+                       
+                    '</div>');
+    // $("div.id_100 select").val("val2");
+    console.log(sel.circulation)
+    let c =sel.circulation;
+   
     $('#container_post'+id+'').find('#post').hide();
     $('#container_post'+id+'').find('#button_container').hide(); 
     $('#container_post'+id+'').append ($(write_post));
+    $('#container_post'+id+'').find( "#circulation").val(c) ;
     $('#container_post'+id+'').find('#cancel').click(function() {
             $('#container_post'+id+'').find('#post').show();
             $('#container_post'+id+'').find('#button_container').show(); 
@@ -248,6 +267,7 @@ function edit_post(id,sel) {
     });
     $('#container_post'+id+'').find('#send').click(function() {
         val=  $('#container_post'+id+'').find('#new_text').val(),
+        
         confirm_edit(id,val);                
     });
 
@@ -350,7 +370,7 @@ function hide_post(pid){
 
 var interval;
 function set_refresh(){
-    interval = setInterval( refresh , 10000);
+    interval = setInterval( refresh , 5000);
 }
 function stop_refresh(){
     clearInterval(interval);
@@ -363,7 +383,7 @@ function refresh()
 }
 var interval_f;
 function set_refresh_f(){
-    interval_f = setInterval(refresh_friendsships_p , 10000);
+    interval_f = setInterval(refresh_friendsships_p , 5000);
 }
 // function stop_refresh_f(){
 //     clearInterval(interval_f);
@@ -400,8 +420,11 @@ function escape_tags(text) {
     return text;
   
 }
+let data_f;
 function get_friends(){
     $.get("scripts/get_friends.py", function(result){
+        if (data_f==result) {return;}
+        data_f = result;
         let users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";
@@ -447,9 +470,11 @@ function get_friends(){
         }
     });
 }
-
+let data_u;
 function get_all_users(){
     $.get("scripts/get_all_users.py", function(result){
+        if(data_u==result){return;}
+        data_u=result;
         if (data_conected_users === result) {  return;  }
         // data_conected_users = result;
         let users = JSON.parse(result);
@@ -520,11 +545,11 @@ function get_all_users(){
     });
 }
 
-
+let data_p;
 function get_pending_requests(){
     $.get("scripts/get_pending_requests.py", function(result){
-        if (data_conected_users === result) {  return;  }
-        // data_conected_users = result;
+        if (data_p === result) {  return;  }
+        data_p = result;
         let users = JSON.parse(result);
         if (users.ok == false) {
           window.location.href = "login.html";

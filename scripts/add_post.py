@@ -11,6 +11,8 @@ try:
 
     form = cgi.FieldStorage()
     text = form.getvalue('text')
+    circulation =  form.getvalue('circulation')
+    # print( circulation)
     uid = str(functions.get_user_id())
     
     if not functions.check_logged():
@@ -19,7 +21,8 @@ try:
         exit()
         
     now = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    insert_query = "INSERT INTO posts (user_id,post_text,write_time) VALUES ('"+ uid +"','"+ text +"','"+ now +"')"
+    insert_query = "INSERT INTO posts (user_id,post_text,write_time,circulation)\
+        VALUES ('"+ uid +"','"+ text +"','"+ now +"','"+ circulation +"')"
     mydb = mefath5_connect.get_connect()
     cursor = mydb.cursor() 
     cursor.execute(insert_query)
