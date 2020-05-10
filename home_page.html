@@ -10,16 +10,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="js/load.js"></script>
+        <script src="js/version.js"></script>
         <title>דף הבית</title>
     </head>
     <body dir="rtl">
+        
         <nav id="nav" class="navbar navbar-expand-sm bg-light navbar-light"></nav>
 
         <h1>ברוכים הבאים לאתר מפתחים!</h1>
-        
        
-        <p> גירסה:0.009 &copy;</p>
-		
+       
        
         <div  class="container" >
             
@@ -51,7 +51,8 @@
                 </div>
             </div>
         </div>
-        
+        <div  class="fixed-bottom" id="version" ></div>
+		 
 
 
         <script>
@@ -61,6 +62,7 @@
                 get_connected_users();
                 set_refresh();
                 buildnavbar();
+                $("#version").append("גירסה: "+get_version()+"") ;
                 
                
                 num_of_requests((num)=>{
