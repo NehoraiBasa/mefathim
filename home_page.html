@@ -30,11 +30,11 @@
                     <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
                     <div id="write_post" style="display: none;">
                             <textarea val = "gg"class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
-                        <!--  </select>  !-->
+                        
                         <div class="row"   id ='button_container' style="margin-right: 0px;">
                             <button class="button" id="send" style="width: 60px;">שלח</button>
                           
-                            <!-- <div> -->
+                            
                         <p>
                             <p style=" margin-right: 10px; margin-left: 3px;"> תפוצה:  </p>
                             <select id="circulation"  style="height: min-content; padding: 2px; width: 95px">
@@ -43,7 +43,6 @@
                                 <option value="2">כולם</option>
                             </select>
                         </p>
-                        <!-- </div> -->
                         </div>
                     </div>
                         <hr/>
@@ -58,9 +57,18 @@
         <script>
            
             $(document).ready(function(){
-                buildnavbar();
+               
                 get_connected_users();
                 set_refresh();
+                buildnavbar();
+                
+               
+                num_of_requests((num)=>{
+                        if (num>0){
+                            let m ="<a class='nav-link active'href='friendships.html'> יש לך "+ num +" בקשות חברות </a>"
+                            buildnavbar(()=>{$("#message").append(m) ;});
+                        }
+                    });
                //myVar = setInterval(alertFunc, 2000, "First parameter", "Second parameter");
             });
 
@@ -83,6 +91,7 @@
                     $("#text").val('');
                     
                 });
+            
    
             });
          
