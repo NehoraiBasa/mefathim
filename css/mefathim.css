@@ -93,10 +93,17 @@ button[type=reset] {
 }
 
 nav {
+    
+}
+#nav {
     direction: ltr;
     position: sticky;
     top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
 }
+
 
 #nav-bar {
     position: relative;

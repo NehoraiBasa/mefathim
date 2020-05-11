@@ -10,10 +10,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="js/load.js"></script>
+        <script src="js/version.js"></script>
         <title>חברים</title>
     </head>
     <body dir="rtl">
-        <nav id="nav" class="navbar navbar-expand-sm bg-light navbar-light"></nav>
+        <nav id="nav" class="navbar navbar-expand-sm bg-light navbar-light fixed-top"></nav>
 
         <h1>ניהול חברים</h1>
         
@@ -46,11 +47,13 @@
 
             </div>
         </div>
+        <p  class="" id="version" ></p>
+
         
 
 
         <script>
-           
+            $("#version").append("גירסה: "+get_version()+"") ;
             $(document).ready(function(){
                 buildnavbar();
                 get_friends();

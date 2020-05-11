@@ -28,7 +28,7 @@ function check_connect(){
 
 
 
-function buildnavbar(){
+ function buildnavbar(cb){
     let user_id = "";
     let objects=[];
 
@@ -60,11 +60,12 @@ function buildnavbar(){
 
         navbar='';
         logo="<a class='navbar-brand'href='home_page.html'><img src='img/logo.png'alt='logo'id='logo' style='width:400px;height: 120px;'></a>";
-        exit="<ul class='navbar-nav ml-auto'><li class='nav-item'><a class='nav-link active'href='scripts/logged_out.py'>יציאה</a></li>";
-        profile='<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+objects[0]+'</a><div class="dropdown-menu dropdown-menu-right" style="text-align: center">';
+        exit="<ul class='navbar-nav ml-auto' id= 'navbar' >"+
+        "<li class='nav-item'><a class='nav-link active'href='scripts/logged_out.py'>יציאה</a></li>";
+        message = "<li class='nav-item' id = 'message'> </a></li>";
         
-        navbar+=logo+exit;
-    
+        profile='<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+objects[0]+'</a><div class="dropdown-menu dropdown-menu-right" style="text-align: center">';
+        navbar+=logo+exit+message;
         for(i=1; i<objects.length-1; i+=2){
             if(objects[i+1]==ourlocation.split("?")[0]){
                 continue;
@@ -80,6 +81,12 @@ function buildnavbar(){
     
         var navigation = document.getElementById("nav");   
         navigation.innerHTML = navbar;
+       if (typeof(cb)=='function') {
+           cb();   
+       }
+        
+        // console.log(3);
+        // return 1;
     }
 }
 
@@ -128,7 +135,7 @@ function print_post() {
     let all_posts = JSON.parse(data);
     if (all_posts.ok == false) {
         window.location.href = "login.html";
-    }
+        }
     
     $(".posts").empty();  
     for (x in all_posts.data)
@@ -616,4 +623,19 @@ function confirm_friend_request(friend_id) {
         }, function(){
             refresh_friendsships_p();
         });
+}
+
+
+function num_of_requests(cb) {
+    $.get("scripts/num_requests.py",
+         function(result){
+           
+            result =  JSON.parse(result);
+            let num = result.num;
+            // console.log(result.num);
+            // return result.num;
+            cb(num);
+            
+        });
+       
 }
