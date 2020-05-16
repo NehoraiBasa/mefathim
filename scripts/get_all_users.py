@@ -27,7 +27,9 @@ try:
     # sql = "SELECT id, nickname, picture_number  FROM users WHERE id NOT IN ("+my_friends_query+") AND NOT id = '"+str(uid)+"' ORDER BY `nickname` DESC"
     # sql = "SELECT id, nickname, picture_number,friends.status FROM  friends,users WHERE id=friends.friend2 AND friends.friend2 = '"+str(uid)+"'  " 
     sql = "SELECT id, nickname, picture_number,friends.friend1,friends.status FROM users LEFT JOIN friends\
-        ON (id=friends.friend1 AND friends.friend2 = '"+str(uid)+"') OR (id=friends.friend2 AND friends.friend1 = '"+str(uid)+"')"
+        ON ((id=friends.friend1 AND friends.friend2 = '"+str(uid)+"') OR (id=friends.friend2 AND friends.friend1 = '"+str(uid)+"'))\
+            AND friends.status > 0"
+            # WHERE friends.status = 0"
 
     mydb = functions.connect()
     mycursor = mydb.cursor()

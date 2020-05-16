@@ -17,31 +17,29 @@ try:
         json_res = {"ok": False}
         print(json.dumps(json_res))
         exit()
-    condition="((friend1='"+uid+"' AND friend2='"+friend_id+"' ) OR (friend2='"+uid+"' AND friend1='"+friend_id+"' ))\
-         AND NOT (status=0) "
-    check_query = " SELECT COUNT(*) FROM friends WHERE "+ condition +" "
     
-    insert_query = "INSERT INTO friends (friend1,friend2,status) VALUES ('"+ uid +"','"+ friend_id+"','1')"
+    
+    condition="((friend1='"+uid+"' AND friend2='"+friend_id+"'))OR((friend2='"+uid+"' AND friend1='"+friend_id+"'))"
+
+    update_query = "UPDATE friends SET status = 0 WHERE "+ condition +" AND status > 0 "
     mydb = functions.connect()
     cursor = mydb.cursor()
-    cursor.execute(check_query)
-    result = cursor.fetchone()
-    # print(result[0])
-    
+   
 
-    if result[0]== 0 : 
-        cursor.execute(insert_query)
-        mydb.commit() 
-    else:
-        json_res = {"ok": False,"type":"friend_ship_exist"}
-        print(json.dumps(json_res))
+    # try:
+    cursor.execute(update_query)
+    mydb.commit() 
+    # except:
+        # json_res = {"ok": False}
+        # print(json.dumps(json_res))
+        # exit()
 
 
 
     
 
-    json_res = {"ok": True}
-    print(json.dumps(json_res))
+    # json_res = {"ok": True}
+    # print(json.dumps(json_res))
 
 
 except Exception as e:
