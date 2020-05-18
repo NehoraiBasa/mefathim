@@ -19,9 +19,10 @@ try:
     posts=[]
     my_friends_query = "SELECT friend1 FROM friends WHERE   status = 2 AND  friend2 = '"+str(uid)+"' UNION \
                         SELECT friend2 FROM friends WHERE   status = 2 AND  friend1 = '"+str(uid)+"' "
-    hidden_post_query="SELECT * FROM hidden_posts  " 
+    hidden_post_query="SELECT pid FROM hidden_posts  " 
     select_query = "SELECT nickname , post_text , write_time , post_id , user_id , circulation FROM users, posts\
         WHERE users.id = posts.user_id AND posts.status = 1            \
+            AND NOT  (post_id IN ("+  hidden_post_query+"))\
         HAVING (user_id IN ("+my_friends_query+") AND circulation = 1) \
             OR circulation = 2                                         \
             OR user_id =   '"+str(uid)+"'                              \

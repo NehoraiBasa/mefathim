@@ -11,6 +11,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="js/load.js"></script>
         <script src="js/version.js"></script>
+       
+
         <title>דף הבית</title>
     </head>
     <body dir="rtl">
@@ -26,13 +28,14 @@
             <div class="row">
                 <div  id="now_logged" class="col-3 text-top"></div>
                     
-                <div class="col-5 align-top post_area">
+                <div class="col-5 align-top post_area" id= "post_area" >
                     <button id="write" class="button" onclick="document.getElementById('write_post').style.display = 'block';">הוספת פוסט</button>
                     <div id="write_post" style="display: none;">
                             <textarea val = "gg"class="new_post " id="text" placeholder="פרסם פוסט" ></textarea><br>
                         
                         <div class="row"   id ='button_container' style="margin-right: 0px;">
-                            <button class="button" id="send" style="width: 60px;">שלח</button>
+                            <button class="post_button" id="send" >שלח</button>
+                            <button class="post_button" id="cancel">בטל</button>
                           
                             
                         <p>
@@ -63,14 +66,12 @@
                 set_refresh();
                 buildnavbar();
                 $("#version").append("גירסה: "+get_version()+"") ;
-                
-               
-                num_of_requests((num)=>{
-                        if (num>0){
-                            let m ="<a class='nav-link active'href='friendships.html'> יש לך "+ num +" בקשות חברות </a>"
-                            buildnavbar(()=>{$("#message").append(m) ;});
-                        }
-                    });
+                $('#post_area').find('#cancel').click(function() {
+                    
+                    $('#post_area').find('#write_post').hide();
+                        // set_refresh();
+                });
+                num_friend_requests();
                //myVar = setInterval(alertFunc, 2000, "First parameter", "Second parameter");
             });
 

@@ -59,10 +59,10 @@ function check_connect(){
 
 
         navbar='';
-        logo="<a class='navbar-brand'href='home_page.html'><img src='img/logo.png'alt='logo'id='logo' style='width:400px;height: 120px;'></a>";
+        logo="<a class='navbar-brand'  href='home_page.html'><img src='img/logo.png'alt='logo'id='logo' style='width:400px;height: 120px;'></a>";
         exit="<ul class='navbar-nav ml-auto' id= 'navbar' >"+
-        "<li class='nav-item'><a class='nav-link active'href='scripts/logged_out.py'>יציאה</a></li>";
-        message = "<li class='nav-item' id = 'message'> </a></li>";
+        "<li class='nav-item' ><a class='nav-link ' style='color:rgb(4, 111, 153);'href='scripts/logged_out.py'>יציאה</a></li>";
+        message = "<li class='nav-item' id = 'message'> </li>";
         
         profile='<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+objects[0]+'</a><div class="dropdown-menu dropdown-menu-right" style="text-align: center">';
         navbar+=logo+exit+message;
@@ -386,6 +386,7 @@ function refresh()
 {
     print_post();
     get_connected_users() ;
+    num_friend_requests();
 
 }
 var interval_f;
@@ -397,8 +398,7 @@ function set_refresh_f(){
 // }
  function refresh_friendsships_p(){
     get_all_users();
-    get_pending_requests();
-    get_friends();
+    
 }
 
 
@@ -427,56 +427,7 @@ function escape_tags(text) {
     return text;
   
 }
-let data_f;
-function get_friends(){
-    $.get("scripts/get_friends.py", function(result){
-        if (data_f==result) {return;}
-        data_f = result;
-        let users = JSON.parse(result);
-        if (users.ok == false) {
-          window.location.href = "login.html";
-        }else {
-            $("#my_friends").empty();
-             let user;
-            for (x in users.data) {
 
-                sel = users.data[x];
-                let id = sel.id;
-                img_num = sel.picture_number;
-                if (img_num == null){
-                    img_num = "22";
-                }
-
-                if (sel.id == users.id) {
-                    continue;
-                } else {
-
-                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
-                                    "<div class=' user_card row' >"+
-                                    "<div class='col-8 text-top'>"+
-                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
-                                        "<div style='width:100%;text-align: center;'>"+
-                                            "<h7><b>" + sel.nickname +" </b></h7>"+
-                                        "</div>"+
-                                    "</div>"+
-                        
-                                    // "<div class='col-4 text-top'>"+
-                                    //     "<button class=' post_button'  id='friend_request' ></button>"+
-                                    // "</div>"+
-                                "</div>"+
-                            "</div>";
-                }
-            
-                $("#my_friends").append(user);
-            
-                // $("#user"+id+"").find('#friend_request').click(function() {
-                    
-                //     send_friend_request(id)                
-                // });
-            }    
-        }
-    });
-}
 let data_u;
 function get_all_users(){
     $.get("scripts/get_all_users.py", function(result){
@@ -490,6 +441,8 @@ function get_all_users(){
         }else {
             $("#all_users").empty();
             $("#my_requests").empty();
+            $("#users_pending_container").empty();
+            $("#my_friends").empty();
             // let faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כל המשתמשים</li>";
              let user;
             for (x in users.data) {
@@ -503,7 +456,7 @@ function get_all_users(){
 
                 if (sel.id == users.id) {
                     continue;
-                }else  if(sel.status == null) {
+                }else  if(sel.status == null ) {
 
                     user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
                                     "<div class=' user_card row' >"+
@@ -525,59 +478,42 @@ function get_all_users(){
                 }else if (sel.status == 1 && sel.friend1==users.id){
                     user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
                                     "<div class=' user_card row' >"+
-                                    "<div class='col-8 text-top'>"+
-                                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
-                                        "<div style='width:100%;text-align: center;'>"+
-                                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                                        "<div class='col-8 text-top'>"+
+                                            "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                                            "<div style='width:100%;text-align: center;'>"+
+                                                "<h7><b>" + sel.nickname +" </b></h7>"+
+                                            "</div>"+
                                         "</div>"+
-                                    "</div>"+
-                        
-                                    // "<div class='col-4 text-top'>"+
-                                    //     "<button class=' post_button'  id='friend_request' >הצע חברות</button>"+
-                                    // "</div>"+
+                                        "<div class='col-4 text-top'>"+
+                                           
+                                            "<button class=' post_button'  id='cancel_request' >בטל בקשה</button>"+
+                                         "</div>"+                    
                                 "</div>"+
                             "</div>";
                         $("#my_requests").append(user);
-                }
-                $("#user"+id+"").find('#friend_request').click(function() {
+                }else if (sel.status == 1 && sel.friend1 != users.id){
+                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
+                    "<div class=' user_card row' >"+
+                    "<div class='col-8 text-top'>"+
+                        "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
+                        "<div style='width:100%;text-align: center;'>"+
+                            "<h7><b>" + sel.nickname +" </b></h7>"+
+                        "</div>"+
+                    "</div>"+
+        
+                    "<div class='col-4 text-top'>"+
+                        "<button class=' post_button'  id='confirm_friend_request' >אשר חברות</button>"+
+                        "<button class=' post_button'  id='reject_request' >דחה הצעה</button>"+
+                    "</div>"+
+                "</div>"+
+            "</div>";
+
+
+            $("#users_pending_container").append(user);
+
+                }else if (sel.status == 2 ){
                     
-                    send_friend_request(id)                
-                });
-                // if (sel.status > 0 ) {
-                //     $("#user"+id+"").find('#friend_request').attr("disabled", true).css('opacity',0.5);
-                    
-                // }
-            }    
-        }
-    });
-}
-
-let data_p;
-function get_pending_requests(){
-    $.get("scripts/get_pending_requests.py", function(result){
-        if (data_p === result) {  return;  }
-        data_p = result;
-        let users = JSON.parse(result);
-        if (users.ok == false) {
-          window.location.href = "login.html";
-        }else {
-            $("#users_pending_container").empty();
-            // let faces = "<div class='.container float-right'><ul class='list-group'><li class='list-group-item users' style='text-align: center'>כל המשתמשים</li>";
-             let user;
-            for (x in users.data) {
-
-                sel = users.data[x];
-                let id = sel.id;
-                img_num = sel.picture_number;
-                if (img_num == null){
-                    img_num = "22";
-                }
-
-                if (sel.id == users.id) {
-                    continue;
-                } else {
-
-                    user = "<div class=' ' id = 'pending_user"+id+"'   style='width:160px'>"+
+                    user = "<div class=' ' id = 'user"+id+"'   style='width:160px'>"+
                                     "<div class=' user_card row' >"+
                                     "<div class='col-8 text-top'>"+
                                         "<img src='img/avatars/"+img_num+".png' alt='Avatar' style='width:100%'>"+
@@ -585,24 +521,46 @@ function get_pending_requests(){
                                             "<h7><b>" + sel.nickname +" </b></h7>"+
                                         "</div>"+
                                     "</div>"+
-                        
                                     "<div class='col-4 text-top'>"+
-                                        "<button class=' post_button'  id='friend_request' >אשר חברות</button>"+
-                                    "</div>"+
+                                           
+                                    "<button class=' post_button'  id='remove_friend' >בטל חברות</button>"+
+                                 "</div>"+
+                    
                                 "</div>"+
                             "</div>";
+             
+            
+                    $("#my_friends").append(user);
                 }
-            
-                $("#users_pending_container").append(user);
-            
-                $("#pending_user"+id+"").find('#friend_request').click(function() {
-                    
-                    confirm_friend_request(id);               
+                 
+                $("#user"+id+"").find('#friend_request').click(function() {
+                    confirm("הצעת חברות",()=>{send_friend_request(id)})
+                                    
                 });
-            }    
+                $("#user"+id+"").find('#cancel_request').click(function() {
+                    confirm("ביטול הצעת חברות",()=>{remove_friend(id),set_refresh_f()})
+                    // confirm_friend_request(id);               
+                });
+                $("#user"+id+"").find('#confirm_friend_request').click(function() {
+                    confirm("אישור הצעת חברות",()=>{confirm_friend_request(id),set_refresh_f()})
+                    // confirm_friend_request(id);               
+                });
+                $("#user"+id+"").find('#reject_request').click(function() {
+                    confirm("דחית הצעת חברות",()=>{remove_friend(id),set_refresh_f()})
+                    // confirm_friend_request(id);               
+                });
+                $("#user"+id+"").find('#remove_friend').click(function() {
+                    confirm("ביטול חברות",()=>{remove_friend(id),set_refresh_f()})
+                                 
+                });
+               
+              
+            }   
+             
         }
     });
 }
+
 
 
 
@@ -625,10 +583,14 @@ function confirm_friend_request(friend_id) {
         });
 }
 
-
-function num_of_requests(cb) {
+let num_r;
+function num_requests(cb) {
     $.get("scripts/num_requests.py",
          function(result){
+             if (num_r==result) {
+                 return;
+             }
+             num_r=result;
            
             result =  JSON.parse(result);
             let num = result.num;
@@ -638,4 +600,56 @@ function num_of_requests(cb) {
             
         });
        
+}
+
+
+function num_friend_requests(){
+    num_requests((num)=>{
+            if (num>0){
+                let m="";
+                if (num==1){m="יש לך בקשת חברות אחת";}
+                else if (num==2){m="יש לך שתי בקשות חברות ";}
+                else if (num==3){m="יש לך שלש בקשות חברות";}
+                else {m = " יש לך "+ num +" בקשות חברות"}
+                m ="<a class='nav-link ' style='color:rgb(4, 111, 153);' href='friendships.html'>"+m+" </a>"
+                buildnavbar(()=>{$("#message").append(m) ;});
+            }
+        });
+    }
+
+    
+function remove_friend(friend_id) {
+    
+    $.post("scripts/remove_friend.py",
+        {
+        friend_id: friend_id,
+        }, function(){
+            refresh_friendsships_p();
+        });
+}
+
+function confirm(massage,f)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class=" confirm_container">'+
+        '<h1>'+massage+'</h1>'+
+        '<p>אתה בטוח? </p>'+
+        '<div class="clearfix">'+
+            '<button type="button" id="cancel" class="cancelbtn">לא</button>'+
+            '<button type="button" id = "confirmed" class="deletebtn">כן אני בטוח</button>'+
+        '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('.cancelbtn').click(function() {
+        $(".confirm_box").remove();
+    });
+    $('#confirmed').click(function() {
+        f();
+        $(".confirm_box").remove();
+        
+    });
 }
