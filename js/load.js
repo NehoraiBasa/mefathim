@@ -653,3 +653,49 @@ function confirm(massage,f)
         
     });
 }
+
+function confirm_picture(alt)
+{
+    stop_refresh();
+    let a =$(''+
+    '<div  class="modal confirm_box">'+
+        '<div class=" confirm_container">'+
+        '<h1>שינוי תמונה</h1>'+
+        '<p>האם אתה בטוח? </p>'+
+        '<div class="clearfix">'+
+            '<button type="button" id="cancel" class="cancelbtn">לא</button>'+
+            '<button type="button" id = "confirmed" class="deletebtn">כן אני בטוח</button>'+
+        '</div>'+
+        '</div>'+
+    '</div>');
+    $( 'body' ).append(a);
+    $(".confirm_box").show();    
+    $('.cancelbtn').click(function() {
+        $(".confirm_box").remove();
+    });
+    $('#confirmed').click(function() {
+        choose_picture(alt);
+        $(".confirm_box").remove();
+        
+    });
+}
+
+function choose_picture(alt){
+    data = {num_picture : alt};
+    data_to_json = JSON.stringify(data);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function(){
+        if(this.readyState == 4){
+            data_from_json = JSON.parse(this.responseText);
+            if(data_from_json.data["sucsses"]){
+                var img = "<img style='height:100%; width:100%;'src="+"img/avatars/";
+                img += alt + ".png"+">";
+                document.getElementById("current_img").innerHTML = img;
+                document.getElementById("msg").innerHTML = "התמונה שלך שונתה בהצלחה!!"
+            }
+
+        }
+    }
+    xmlhttp.open("POST", "scripts/select_avatar.py", true);
+    xmlhttp.send(data_to_json);
+}
