@@ -13,9 +13,18 @@
         <link rel="stylesheet" href="css/mefathim.css">
         <!-- <script src="js/navbar.js"></script> -->
         <script src="js/load.js"></script>
+        <script src="js/version.js"></script>
         <style>
             table{
                 text-align: center;
+            }
+            #result {
+                width: 25%;
+            }
+            #mg:hover {
+                cursor: pointer;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.274), 0 6px 20px 0 rgba(0, 0, 0, 0.13);
+                transition: 0.3s;
             }
         </style>
         <title>שינוי העדפות</title>
@@ -98,7 +107,7 @@
                 </form>
             </div>
 
-        <p> גירסה:0.0008 &copy;</p>
+            <p  class="" id="version" style="text-align: center;"></p>
         <script>
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function(){
@@ -113,6 +122,16 @@
                         document.getElementsByName("city")[0].value = data_from_json.data.city;
                         document.getElementsByName("country")[0].value = data_from_json.data.country;
                         document.getElementsByName("phone")[0].value = data_from_json.data.phone_number;
+                        var img_num = String(data_from_json.data.picture_number);
+                    
+                        if(img_num == ""){
+                            img_num = "22";
+                        }
+                        
+                        var img = "<a href="+"avatars.html"+"><img id="+"mg"+" style='height:100%; width:100%; border-radius: 50%;'src="+"img/avatars/";
+                        img += img_num+ ".png"+"></a>";
+                        document.getElementById("result").innerHTML = img;
+                        
                     }
                     else{
                         window.location = "login.html";
@@ -152,6 +171,8 @@
                 }
                 window.onbeforeunload = null;
             }
+
+            $("#version").append("גירסה: "+get_version()+"") ;
 
         </script>
     </body>

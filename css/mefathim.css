@@ -365,6 +365,10 @@ hr {
     max-width: 600px;
 }
 
+.img.card-container.card {
+    max-width: 500px;
+}
+
 @media screen and (max-width: 1400px) {
     h1, h2 {
         font-size: 55px;
